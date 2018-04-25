@@ -4,11 +4,10 @@ block content
   div.container.header
     div.larger
       header
-        h1 Deep
-          strong DIVA
-        h2 A Highly-Functional Python Framework for Reproducible Experiments
+        h1 DIVAServices
+        h2 A RESTful Web Service Framework for Document Image Analysis Methods
         p
-          a(href='https://github.com/DIVA-DIA/DeepDIVA', target='_blank')
+          a(href='https://github.com/lunactic/DIVAServices', target='_blank')
             i.fab.fa-github
             span Try it on Github
 
@@ -16,75 +15,75 @@ block content
     div.larger
       section
         article.feature.active
-          h1 Deep-learning<br />Out-of-the-Box
-          p PyTorch integration for common deep learning scenarios
-
-        article.feature
-          h1 Automatic<br />Hyper-parameter<br />Optimization
-          p Smarter than grid-search with SigOpt
-
-        article.feature
-          h1 DeepDIVA as a<br />Web Service
-          p Run your own, and reproduce the experiments of others in the cloud
-
-        article.feature
-          h1 Data<br />Visualization
-          p An image is worth a thousand lines of logs
-
-        article.feature
-          h1 New Dataset Support
-          p Scripts to prepare your datasets faster
-
-        article.feature
-          h1 Comparing Methods
-          p How effective are your changes?
-
-        article.feature
-          h1 Internal Inspection
-          p Find out what happens inside your network
-
-        article.feature
-          h1 Working on 2D Data
-          p Understand your networks better on toy-problems
+          h1 State-of-the-Art<br />Document Analysis Methods
+          p Currently 25 different methods available
+        article.feature.active
+          h1 Micro Service Architecture <br />
+          p One Docker Image per method
 
   div.container.paper
     div.larger
       section
-        h1 DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments
+        h1 SDK Reinvented: Document Image Analysis Methods as RESTful Web Services
         div.abstract
           p
             strong Abstract. 
-            span We introduce DeepDIVA: an infrastructure designed to enable and intuitive setup of reproducible experiments with a range of useful analysis functionality. Reproducing scientific can be a frustrating experience, not only in document image analysis but in machine learning in general. DeepDIVA a researcher can either reproduce a given with a very limited amount of information or share their own experiments with others. Moreover, the framework a large range of functions, such as boilerplate code, keeping track of experiments, hyper-parameter optimization, and visualization of data and results. To demonstrate the effectiveness of  this  framework, this paper presents case studies in the area of handwritten document analysis where researchers benefit from the integrated functionality. DeepDIVA is implemented in Python and uses the deep learning framework PyTorch. It is completely open source, and accessible as Web Service through DIVAServices.
-          p
-            strong Paper on
-            a(href='#') arXiv.org
-            span .
+            span Document Image Analysis (DIA) systems become ever more advanced, but also more complex — computationally, and logically. This increases the difficulty of integrating existing state-of-the-art approaches into new research or into practical workflows. The current approach to sharing software is publishing source code — leaving the burden to the integrator — or creating a Software Development Kit (SDK) which is often restricted to one programming language. We present DIVAServices a framework for sharing and accessing DIA methods within the research community and beyond. Using a RESTful web service architecture we provide access to the methods, leading to only one system on which the binaries of methods need to be maintained. All it takes for a developer to use an algorithm is a simple HTTP request with the image data and parameters for the method and they will receive the computed results in a format that allows for seamless integration into any kind of workflow or for further processing. Furthermore, DIVAServices is open-source, enabling other research groups or libraries to host their own instance in their environment. Using this framework, future DIA systems can be built on the shoulders of well tested algorithms, accessible to everyone.
         div.metadata
           p
-            strong Submitted at
-            span The 16th International Conference on in Handwriting Recognition (ICFHR'18)
+            strong Presented ad
+            span the 12th IAPR Workshop on Document Analysis Systems (DAS), Santorini, Greece, 2016
           p
             strong Authors
-            span Michele Alberti, Vinaychandran Pondenkandath, Marcel Würsch, Rolf Ingold, Marcus Liwicki
-
+            span Marcel Würsch, Rolf Ingold, and Marcus Liwicki
+          p
+            strong Awards
+            span ITESOFT Best Student Paper Award
+      div.container.paper
+    div.larger
+      section
+        h1 Web Services in Document Image Analysis - Recent Developments and the Importance of Building an Ecosystem
+        div.abstract
+          p
+            strong Abstract. 
+            span Web Services are being adapted into the workflows of many Document Image Analysis researchers. However, so far, there is no common platform for providing access to algorithms in the community. DIVAServices aims at becoming this by providing a platform that is open to the whole community to provide their own methods as Web Services. In this paper we present updates and enhancements of the existing DIVAServices platform. These includes a new computational backend, a revamped execution workflow based on asynchronous communication, and the possibility for methods to specify their outputs. Furthermore we discuss the importance of an “ecosystem” for such a platform. We argue that only providing a RESTful API is not enough. Users need tools and services around the framework that supports them in adapting the Web Services and we introduce some of the tools that we built around DIVAServices.
+        div.metadata
+          p
+            strong Presented ad
+            span the 13th IAPR Workshop on Document Analysis Systems (DAS), Vienna, Austra, 2018
+          p
+            strong Authors
+            span Marcel Würsch, Marcus Liwicki, and Rolf Ingold
   div.container.paper
     div.larger
       section
        div.metadata.is-full-lenght
          h1 Cite us
-         p If you use our software please cite our paper as (we will update this soon):
+         p If you use our software please cite our paper(s)
          pre
-          code @inproceedings{albertipondenkandath2018deepdiva,
-            |   archivePrefix = {arXiv},
-            |   author = {Alberti, Michele Pondenkandath, Vinaychandran W\"ursch, Marcel Ingold, Rolf Liwicki, Marcus},
-            |   title = {{DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments}},
-            |   year = {2018}
-            | }
+          code @inproceedings{Wursch2016c,
+                | address = {Santorini, Greece},
+                | author = {W{\"{u}}rsch, Marcel and Ingold, Rolf and Liwicki, Marcus},
+                | booktitle = {12th IAPR Workshop on Document Analysis Systems},
+                | doi = {10.1109/DAS.2016.56},
+                | pages = {90--95},
+                | title = {{SDK Reinvented: Document Image Analysis Methods as RESTful Web Services}},
+                | year = {2016}
+                | }
+         pre
+          code @inproceedings{Wursch2018,
+                | address = {Vienna, Austria},
+                | author = {W{\"{u}}rsch, Marcel and Liwicki, Marcus and Ingold, Rolf},
+                | booktitle = {13th IAPR Workshop on Document Analysis Systems},
+                | pages = {334--339},
+                | title = {{Web Services in Document Image Analysis - Recent Developments and the Importance of Building an Ecosystem}},
+                | year = {2018}
+                | }
 
   div.container.paper
     div.larger
       section
        div.metadata
          h1 License
-         p Our work is on
-          a(href='https://github.com/DIVA-DIA/DeepDIVA/blob/master/LICENSE') GNU Lesser General Public License v3.0
+         p Our work is on 
+          a(href='https://github.com/lunactic/DIVAServices/blob/master/LICENSE') GNU Lesser General Public License v2.1

@@ -1,7 +1,7 @@
 {
   "locals": {
-    "url": "/DeepDIVAweb/",
-    "baseUrl": "/DeepDIVAweb/",
+    "url": "/",
+    "baseUrl": "/",
     "name": "DeepDIVA",
     "owner": "Michele Alberti and Vinaychandran Pondenkandath",
     "description": "DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments"
