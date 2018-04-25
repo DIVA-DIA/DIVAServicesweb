@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
-    <title>Getting started - DeepDIVA
+    <title>Creating a New Task - DeepDIVA
     </title>
     <link rel="stylesheet" href="/styles/main.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather">
@@ -29,30 +29,38 @@
     <div class="container header">
       <div class="larger">
         <header class="is-small">
-          <h2>Getting started</h2>
+          <h2>Creating a New Task</h2>
         </header>
       </div>
     </div>
     <div class="container md-content">
       <div class="larger">
-        <aside>Hi, let's start!</aside>
-        <section class="md-container"><p>In order to get the framework up and running it is only necessary to clone the latest version of the&nbsp;repository:</p>
-<pre><code class="lang-shell">git clone https://github.com/DIVA-DIA/DeepDIVA.git
-</code></pre>
-<p>Run the&nbsp;script:</p>
-<pre><code class="lang-shell">bash setup_environment.sh
-</code></pre>
-<p>Reload your environment variables from <code>.bashrc</code> with: <code>source ~/.bashrc</code></p>
-<h2 id="test-the-correctness-of-the-procecdure">Test the correctness of the&nbsp;procecdure</h2>
-<p>To verify the correctness of the procecdure you can run a small experiment. Activate the DeepDIVA python&nbsp;environment: </p>
-<pre><code class="lang-python">source activate deepdiva
-</code></pre>
-<p>Download the <span class="caps">MNIST</span>&nbsp;dataset:</p>
-<pre><code class="lang-python">python util/data/get_a_dataset.py mnist --output-folder toy_dataset
-</code></pre>
-<p>Train a simple Convolutional Neural Network on the <span class="caps">MNIST</span> dataset using the&nbsp;command:</p>
-<pre><code class="lang-python">python template/RunMe.py --output-folder log --dataset-folder toy_dataset/MNIST --lr <span class="number">0.1</span> --ignoregit --no-cuda
-</code></pre>
+        <aside>
+          <ul>
+            <li><a href="/articles/troubleshooting">Troubleshooting</a></li>
+          </ul>
+          <h2>Basic</h2>
+          <ul>
+            <li><a href="/articles/customizing-experiments">Customizing Experiments</a></li>
+            <li><a href="/articles/prepare-dataset">Preparing a Dataset</a></li>
+            <li><a href="/articles/use-apply-model">Applying a Model to new Data</a></li>
+            <li><a href="/articles/use-bidimensional"> Perform Bidimensional Data Classification</a></li>
+            <li><a href="/articles/use-image-classification">Perform Image Classification</a></li>
+            <li><a href="/articles/use-triplet">Perform Image Similarity Matching</a></li>
+            <li><a href="/articles/visualize-results">Visualizing the Results</a></li>
+          </ul>
+          <h2>Intermediate</h2>
+          <ul>
+            <li><a href="/articles/add-new-cl-arguments">Adding a New Command-Line Argument</a></li>
+            <li><a href="/articles/ensure-reproducibility">Ensuring Reproducibility</a></li>
+            <li><a href="/articles/implement-your-model">Implementing Your Own Model</a></li>
+          </ul>
+          <h2>Advanced</h2>
+          <ul>
+            <li><a href="/articles/creating-runner-class">Creating a New Task</a></li>
+          </ul>
+        </aside>
+        <section class="md-container"><h1 id="coming-soon-">Coming&nbsp;soon!</h1>
 </section>
       </div>
     </div>
