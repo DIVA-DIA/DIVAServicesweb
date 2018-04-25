@@ -1,10 +1,10 @@
 {
   "locals": {
-    "url": "/",
-    "baseUrl": "/",
-    "name": "DeepDIVA",
-    "owner": "Michele Alberti and Vinaychandran Pondenkandath",
-    "description": "DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments"
+    "url": "/DIVAServicesweb/",
+    "baseUrl": "/DIVAServicesweb/",
+    "name": "DIVAServices",
+    "owner": "Marcel Würsch",
+    "description": "DIVAServices: A RESTful Web Service Framework for Document Image Analysis Methods"
   },
   "output": "./../",
   "ignore": ["*/*.less", "**/*.less"],
