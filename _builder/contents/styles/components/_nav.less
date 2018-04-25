@@ -1,0 +1,45 @@
+.container.nav {
+	nav {
+		height: 60px;
+	}
+
+	.left {
+		float: left;
+
+		a {
+			font-weight: bold;
+		}
+	}
+
+	.right {
+		float: right;
+	}
+
+	li {
+		display: inline-block;
+
+		a {
+			display: block;
+			line-height: 60px;
+			padding: 0 10px;
+
+			text-decoration: none;
+			color: @white;
+
+			opacity: .75;
+			transition: all linear 100ms;
+
+			&:hover, &:focus {
+				opacity: 1;
+			}
+
+			&.disable {
+				opacity: .5;
+
+				&:hover, &:focus {
+					opacity: .5;
+				}
+			}
+		}
+	}
+}

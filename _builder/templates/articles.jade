@@ -1,0 +1,15 @@
+extends layout
+
+block prepend title
+  | #{ 'Tutorials - '}
+
+block content
+  div.container.header
+    div.larger
+      header.is-small
+        h2 Tutorials
+  div.container.md-content
+    div.larger
+      aside
+        include tutorials-list
+      section.md-container 

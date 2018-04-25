@@ -1,0 +1,90 @@
+extends layout
+
+block content
+  div.container.header
+    div.larger
+      header
+        h1 Deep
+          strong DIVA
+        h2 A Highly-Functional Python Framework for Reproducible Experiments
+        p
+          a(href='https://github.com/DIVA-DIA/DeepDIVA', target='_blank')
+            i.fab.fa-github
+            span Try it on Github
+
+  div.container.features
+    div.larger
+      section
+        article.feature.active
+          h1 Deep-learning<br />Out-of-the-Box
+          p PyTorch integration for common deep learning scenarios
+
+        article.feature
+          h1 Automatic<br />Hyper-parameter<br />Optimization
+          p Smarter than grid-search with SigOpt
+
+        article.feature
+          h1 DeepDIVA as a<br />Web Service
+          p Run your own, and reproduce the experiments of others in the cloud
+
+        article.feature
+          h1 Data<br />Visualization
+          p An image is worth a thousand lines of logs
+
+        article.feature
+          h1 New Dataset Support
+          p Scripts to prepare your datasets faster
+
+        article.feature
+          h1 Comparing Methods
+          p How effective are your changes?
+
+        article.feature
+          h1 Internal Inspection
+          p Find out what happens inside your network
+
+        article.feature
+          h1 Working on 2D Data
+          p Understand your networks better on toy-problems
+
+  div.container.paper
+    div.larger
+      section
+        h1 DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments
+        div.abstract
+          p
+            strong Abstract. 
+            span We introduce DeepDIVA: an infrastructure designed to enable and intuitive setup of reproducible experiments with a range of useful analysis functionality. Reproducing scientific can be a frustrating experience, not only in document image analysis but in machine learning in general. DeepDIVA a researcher can either reproduce a given with a very limited amount of information or share their own experiments with others. Moreover, the framework a large range of functions, such as boilerplate code, keeping track of experiments, hyper-parameter optimization, and visualization of data and results. To demonstrate the effectiveness of  this  framework, this paper presents case studies in the area of handwritten document analysis where researchers benefit from the integrated functionality. DeepDIVA is implemented in Python and uses the deep learning framework PyTorch. It is completely open source, and accessible as Web Service through DIVAServices.
+          p
+            strong Paper on
+            a(href='#') arXiv.org
+            span .
+        div.metadata
+          p
+            strong Submitted at
+            span The 16th International Conference on in Handwriting Recognition (ICFHR'18)
+          p
+            strong Authors
+            span Michele Alberti, Vinaychandran Pondenkandath, Marcel Würsch, Rolf Ingold, Marcus Liwicki
+
+  div.container.paper
+    div.larger
+      section
+       div.metadata.is-full-lenght
+         h1 Cite us
+         p If you use our software please cite our paper as (we will update this soon):
+         pre
+          code @inproceedings{albertipondenkandath2018deepdiva,
+            |   archivePrefix = {arXiv},
+            |   author = {Alberti, Michele Pondenkandath, Vinaychandran W\"ursch, Marcel Ingold, Rolf Liwicki, Marcus},
+            |   title = {{DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments}},
+            |   year = {2018}
+            | }
+
+  div.container.paper
+    div.larger
+      section
+       div.metadata
+         h1 License
+         p Our work is on
+          a(href='https://github.com/DIVA-DIA/DeepDIVA/blob/master/LICENSE') GNU Lesser General Public License v3.0

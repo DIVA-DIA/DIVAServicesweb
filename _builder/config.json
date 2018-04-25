@@ -1,0 +1,29 @@
+{
+  "locals": {
+    "url": "/DeepDIVAweb/",
+    "baseUrl": "/DeepDIVAweb/",
+    "name": "DeepDIVA",
+    "owner": "Michele Alberti and Vinaychandran Pondenkandath",
+    "description": "DeepDIVA: A Highly-Functional Python Framework for Reproducible Experiments"
+  },
+  "output": "./../",
+  "ignore": ["*/*.less", "**/*.less"],
+  "plugins": [
+    "./plugins/paginator.coffee"
+  ],
+  "require": {
+    "moment": "moment",
+    "_": "underscore",
+    "typogr": "typogr"
+  },
+  "jade": {
+    "pretty": true
+  },
+  "markdown": {
+    "smartLists": true,
+    "smartypants": true
+  },
+  "paginator": {
+    "perPage": 100
+  }
+}
