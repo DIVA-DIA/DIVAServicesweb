@@ -1,0 +1,29 @@
+{
+  "locals": {
+    "url": "/",
+    "baseUrl": "/",
+    "name": "DIVAServices",
+    "owner": "Marcel Würsch",
+    "description": "DIVAServices: A RESTful Web Service Framework for Document Image Analysis Methods"
+  },
+  "output": "./../",
+  "ignore": ["*/*.less", "**/*.less"],
+  "plugins": [
+    "./plugins/paginator.coffee"
+  ],
+  "require": {
+    "moment": "moment",
+    "_": "underscore",
+    "typogr": "typogr"
+  },
+  "jade": {
+    "pretty": true
+  },
+  "markdown": {
+    "smartLists": true,
+    "smartypants": true
+  },
+  "paginator": {
+    "perPage": 100
+  }
+}
