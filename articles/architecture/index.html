@@ -38,12 +38,72 @@
           <ul>
             <li><a href="/DIVAServicesweb/articles/core">Core Principles</a></li>
             <li><a href="/DIVAServicesweb/articles/architecture">Architecture</a></li>
-            <li><a href="/DIVAServicesweb/articles/basic-example">Basic</a></li>
+            <li><a href="/DIVAServicesweb/articles/basic-example">Basic Example</a></li>
+            <li><a href="/DIVAServicesweb/articles/api">API Endpoints</a></li>
           </ul>
           <h2>Intermediate</h2>
           <h2>Advanced</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/provide-your-method">Provide your method</a></li>
+          </ul>
+          <h2>Applications</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
+          </ul>
         </aside>
-        <section class="md-container"><h1 id="coming-soon-">Coming&nbsp;soon!</h1>
+        <section class="md-container"><h1 id="architecture">Architecture</h1>
+<p>The current architecture of DIVAServices is visualized in the Figure&nbsp;below:</p>
+<p><img src="/DIVAServicesweb/articles/architecture/architecture.png" alt="DIVAServices Architecture"></p>
+<p>So we can see DIVAServices is comprised of three different&nbsp;elements:</p>
+<ul>
+<li>DIVAServices (the core&nbsp;framework)</li>
+<li>A Docker&nbsp;server</li>
+<li>A file storage&nbsp;server</li>
+</ul>
+<p>Each of these elements is described&nbsp;below.</p>
+<h2 id="divaservices-the-core-framework-">DIVAServices (the core&nbsp;framework)</h2>
+<p>The core framework is programmed in <a href="https://www.typescriptlang.org/">TypeScript</a> a super script of JavaScript with added&nbsp;types.</p>
+<p>DIVAServices is as a web server and handles all incoming requests and serves back the&nbsp;information.</p>
+<p>DIVAServices uses <a href="https://www.json.org/"><span class="caps">JSON</span></a> as data transmission&nbsp;format.</p>
+<h3 id="handling-get-requests">Handling <span class="caps">GET</span>&nbsp;Requests</h3>
+<p>In case of an incoming <span class="caps">GET</span> request, all that the framework needs to do is look up the specific information and send it back to the&nbsp;client.</p>
+<h3 id="handling-post-requests">Handling <span class="caps">POST</span>&nbsp;Requests</h3>
+<p>A <span class="caps">POST</span> request is always used to execute a particular method. This can be achieved by calling the URL of the method.
+DIVAServices parses this incoming request, perform some sanity checking and execute a Docker Container of the specific method.
+Once the method finished, DIVAServices will retrieve the results and provide them to the&nbsp;client.</p>
+<h4 id="asynchronous-execution">Asynchronous&nbsp;Execution</h4>
+<p>Because some methods can take a long time until they are executed, DIVAServices handles the communication for executing methods in an asynchronous&nbsp;way.</p>
+<p>Whenever a method execution is started, the client immediately receives a <span class="caps">JSON</span> response as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    &quot;results&quot;: [
+        {
+            &quot;resultLink&quot;: &quot;http://divaservices.unifr.ch/api/v2/results/victoriousabandonedbassethound/data_0/data_0.json&quot;
+        }
+    ],
+    ...
+    &quot;status&quot;: &quot;done&quot;,
+    &quot;statusCode&quot;: 202
+}
+</code></pre>
+<p>The client that started the execution has then to consistenly poll the <code>results:resultLink</code> <span class="caps">URL</span>(s). Once an execution is finished this GET request will respond with a JSON object like the&nbsp;following:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"output"</span>: [
+    ... specific outputs of the method
+  ],
+  <span class="attr">"status"</span>: <span class="string">"done"</span>,
+  <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/smugquintessentialbaiji/data_0/data_0.json"</span>,
+  <span class="attr">"collectionName"</span>: <span class="string">"smugquintessentialbaiji"</span>
+}
+</code></pre>
+<p>The <code>status</code> field can be used as an identifier to check against if the execution is finished or&nbsp;not.</p>
+<h2 id="docker-server">Docker&nbsp;Server</h2>
+<p>DIVAServices makes use of <a href="https://docker.io">Docker</a> in order to execute the methods.
+For each image a Docker Image is created that contains the method including all the binaries and libraries required for it to&nbsp;run.</p>
+<p>A tutorial for how to create such a Docker image is available <a href="/DIVAServicesweb/articles/provide-your-method">here</a></p>
+<h3 id="common-workflow-language">Common Workflow&nbsp;Language</h3>
+<p>In order to actually execute the Docker images (and to prepare for provding pipeline support on DIVAServices) we make use of the <a href="http://www.commonwl.org/">Common Workflow Language</a>. </p>
+<h2 id="file-storage">File&nbsp;Storage</h2>
+<p>The last piece in the architecture is the file storage. We rely on a normal Linux filesystem that is shared between DIVAServices and Docker through <a href="http://tldp.org/HOWTO/NFS-HOWTO/intro.html"><span class="caps">NFS</span></a>.</p>
 </section>
       </div>
     </div>
