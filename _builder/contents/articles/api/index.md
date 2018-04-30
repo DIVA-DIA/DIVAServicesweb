@@ -5,6 +5,22 @@ template: article.jade
 
 # API Endpoints
 
+- [API Endpoints](#api-endpoints)
+  - [Root Endpoint](#root-endpoint)
+    - [GET /](#get)
+  - [Method Endpoints](#method-endpoints)
+    - [GET /:type/:methodname](#get---type--methodname)
+    - [POST /:type/:methodname](#post---type--methodname)
+      - [Request-Body](#request-body)
+      - [Request-Response](#request-response)
+      - [Fetching For Results](#fetching-for-results)
+      - [Example](#example)
+  - [Data / Collection Endpoints](#data---collection-endpoints)
+    - [GET /collections](#get--collections)
+    - [POST /collections](#post--collections)
+    - [GET /collections/:collectionname](#get--collections--collectionname)
+    - [PUT /collections/:collectionname](#put--collections--collectionname)
+
 ## Root Endpoint
 ### GET /
 The root (http://divaservices.unifr.ch/api/v2/) provides information about all available methods. The response will look as follows:
@@ -207,3 +223,96 @@ The following `request-body`can be used to execute the [Otsu Binarization](http:
   ]
 }
 ```
+
+## Data / Collection Endpoints
+
+### GET /collections
+Provides a list of all existing collections. The returned JSON object is structured as follows:
+
+``` JSON
+{
+  "collections": [
+    {
+      "collection": {
+        "name": "irritatingflickeringpitbull",
+        "url": "http://divaservices.unifr.ch/api/v2/collections/irritatingflickeringpitbull"
+      }
+    },
+    {
+      "collection": {
+        "name": "dopeyscholarlykentrosaurus",
+        "url": "http://divaservices.unifr.ch/api/v2/collections/dopeyscholarlykentrosaurus"
+      }
+    }
+  ]
+```
+Each collection has a `name` and an `url` under which more information can be fetched from.
+
+### POST /collections
+Creates a new collection. The `request-body` to create a new collection has to look as follows:
+
+``` JSON
+{
+  "name": "ocr_models",
+  "files":[
+    {
+      "type":"url",
+      "value":"http://www.tmbdev.net/en-default.pyrnn.gz",
+      "name":"english.gz"
+    }
+  ]
+}
+```
+The following information needs to be provided:
+ - `name` (optional): The identifier of this collection. If none provided a random one is generated.
+ - `files`: An array of files that should be added to this collection.
+
+Each entry of `files` is structured as follows:
+- `type`: the type of file that is provided, can be `url` or `file`
+- `value`: The value for the file.
+- `name`: The filename the filename should have within the collection (complete filename needed)
+
+The `value` depends on the `type` and the two following options are possible:
+- `type=url`: `value` points to the URL where the file can be downloaded from
+- `type=file`: `value` is the `base64` encrypted content of the file
+
+**Note:** The complete request can not be larger than `250mb`.
+
+### GET /collections/:collectionname
+Provides detailed information about a collection. The returned JSON is structured as follows:
+
+```JSON
+{
+  "statusCode": 200,
+  "statusMessage": "Collection is available",
+  "percentage": 100,
+  "totalFiles": 1,
+  "files": [
+    {
+      "file": {
+        "md5": "e816b16b11ee17a32ecaaf7b7a19b2c3",
+        "url": "http://divaservices.unifr.ch/api/v2/files/irritatingflickeringpitbull/original/inverseImage.jpg",
+        "identifier": "irritatingflickeringpitbull/inverseImage.jpg"
+      }
+    }
+  ]
+}
+```
+The `files` array contains a `file` object for each file that is in this collection.
+The `identifier` can be used as data reference when executing a method.
+
+### PUT /collections/:collectionname
+Adds a file into a collection. The `request-body` needs to look as follows:
+
+```JSON
+{
+  "files":[
+    {
+      "type":"url",
+      "value":"http://www.tmbdev.net/en-default.pyrnn.gz",
+      "name":"english.gz"
+    }
+  ]
+}
+```
+The same rules as in [POST /collections](#post--collections) apply here too.

@@ -52,6 +52,33 @@
           </ul>
         </aside>
         <section class="md-container"><h1 id="api-endpoints"><span class="caps">API</span>&nbsp;Endpoints</h1>
+<ul>
+<li><a href="#api-endpoints"><span class="caps">API</span> Endpoints</a><ul>
+<li><a href="#root-endpoint">Root Endpoint</a><ul>
+<li><a href="#get"><span class="caps">GET</span>&nbsp;/</a></li>
+</ul>
+</li>
+<li><a href="#method-endpoints">Method Endpoints</a><ul>
+<li><a href="#get---type--methodname"><span class="caps">GET</span>&nbsp;/:type/:methodname</a></li>
+<li><a href="#post---type--methodname"><span class="caps">POST</span> /:type/:methodname</a><ul>
+<li><a href="#request-body">Request-Body</a></li>
+<li><a href="#request-response">Request-Response</a></li>
+<li><a href="#fetching-for-results">Fetching For&nbsp;Results</a></li>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#data---collection-endpoints">Data / Collection Endpoints</a><ul>
+<li><a href="#get--collections"><span class="caps">GET</span>&nbsp;/collections</a></li>
+<li><a href="#post--collections"><span class="caps">POST</span>&nbsp;/collections</a></li>
+<li><a href="#get--collections--collectionname"><span class="caps">GET</span>&nbsp;/collections/:collectionname</a></li>
+<li><a href="#put--collections--collectionname"><span class="caps">PUT</span>&nbsp;/collections/:collectionname</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="root-endpoint">Root&nbsp;Endpoint</h2>
 <h3 id="get-"><span class="caps">GET</span>&nbsp;/</h3>
 <p>The root (<a href="http://divaservices.unifr.ch/api/v2/">http://divaservices.unifr.ch/api/v2/</a>) provides information about all available methods. The response will look as&nbsp;follows:</p>
@@ -237,6 +264,89 @@ The POST request needs to contain a <code>request-body</code> that contains all 
   ]
 }
 </code></pre>
+<h2 id="data-collection-endpoints">Data / Collection&nbsp;Endpoints</h2>
+<h3 id="get-collections"><span class="caps">GET</span>&nbsp;/collections</h3>
+<p>Provides a list of all existing collections. The returned <span class="caps">JSON</span> object is structured as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"collections"</span>: [
+    {
+      <span class="attr">"collection"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"irritatingflickeringpitbull"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/collections/irritatingflickeringpitbull"</span>
+      }
+    },
+    {
+      <span class="attr">"collection"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"dopeyscholarlykentrosaurus"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/collections/dopeyscholarlykentrosaurus"</span>
+      }
+    }
+  ]
+</code></pre>
+<p>Each collection has a <code>name</code> and an <code>url</code> under which more information can be fetched&nbsp;from.</p>
+<h3 id="post-collections"><span class="caps">POST</span>&nbsp;/collections</h3>
+<p>Creates a new collection. The <code>request-body</code> to create a new collection has to look as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"name"</span>: <span class="string">"ocr_models"</span>,
+  <span class="attr">"files"</span>:[
+    {
+      <span class="attr">"type"</span>:<span class="string">"url"</span>,
+      <span class="attr">"value"</span>:<span class="string">"http://www.tmbdev.net/en-default.pyrnn.gz"</span>,
+      <span class="attr">"name"</span>:<span class="string">"english.gz"</span>
+    }
+  ]
+}
+</code></pre>
+<p>The following information needs to be&nbsp;provided:</p>
+<ul>
+<li><code>name</code> (optional): The identifier of this collection. If none provided a random one is&nbsp;generated.</li>
+<li><code>files</code>: An array of files that should be added to this&nbsp;collection.</li>
+</ul>
+<p>Each entry of <code>files</code> is structured as&nbsp;follows:</p>
+<ul>
+<li><code>type</code>: the type of file that is provided, can be <code>url</code> or <code>file</code></li>
+<li><code>value</code>: The value for the&nbsp;file.</li>
+<li><code>name</code>: The filename the filename should have within the collection (complete filename&nbsp;needed)</li>
+</ul>
+<p>The <code>value</code> depends on the <code>type</code> and the two following options are&nbsp;possible:</p>
+<ul>
+<li><code>type=url</code>: <code>value</code> points to the <span class="caps">URL</span> where the file can be downloaded&nbsp;from</li>
+<li><code>type=file</code>: <code>value</code> is the <code>base64</code> encrypted content of the&nbsp;file</li>
+</ul>
+<p><strong>Note:</strong> The complete request can not be larger than <code>250mb</code>.</p>
+<h3 id="get-collections-collectionname"><span class="caps">GET</span>&nbsp;/collections/:collectionname</h3>
+<p>Provides detailed information about a collection. The returned <span class="caps">JSON</span> is structured as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"statusCode"</span>: <span class="number">200</span>,
+  <span class="attr">"statusMessage"</span>: <span class="string">"Collection is available"</span>,
+  <span class="attr">"percentage"</span>: <span class="number">100</span>,
+  <span class="attr">"totalFiles"</span>: <span class="number">1</span>,
+  <span class="attr">"files"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"md5"</span>: <span class="string">"e816b16b11ee17a32ecaaf7b7a19b2c3"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/files/irritatingflickeringpitbull/original/inverseImage.jpg"</span>,
+        <span class="attr">"identifier"</span>: <span class="string">"irritatingflickeringpitbull/inverseImage.jpg"</span>
+      }
+    }
+  ]
+}
+</code></pre>
+<p>The <code>files</code> array contains a <code>file</code> object for each file that is in this collection.
+The <code>identifier</code> can be used as data reference when executing a&nbsp;method.</p>
+<h3 id="put-collections-collectionname"><span class="caps">PUT</span>&nbsp;/collections/:collectionname</h3>
+<p>Adds a file into a collection. The <code>request-body</code> needs to look as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"files"</span>:[
+    {
+      <span class="attr">"type"</span>:<span class="string">"url"</span>,
+      <span class="attr">"value"</span>:<span class="string">"http://www.tmbdev.net/en-default.pyrnn.gz"</span>,
+      <span class="attr">"name"</span>:<span class="string">"english.gz"</span>
+    }
+  ]
+}
+</code></pre>
+<p>The same rules as in <a href="#post--collections"><span class="caps">POST</span> /collections</a> apply here&nbsp;too.</p>
 </section>
       </div>
     </div>
