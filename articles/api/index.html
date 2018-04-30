@@ -51,7 +51,192 @@
             <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
           </ul>
         </aside>
-        <section class="md-container"><h1 id="coming-soon">Coming&nbsp;soon</h1>
+        <section class="md-container"><h1 id="api-endpoints"><span class="caps">API</span>&nbsp;Endpoints</h1>
+<h2 id="root-endpoint">Root&nbsp;Endpoint</h2>
+<h3 id="get-"><span class="caps">GET</span>&nbsp;/</h3>
+<p>The root (<a href="http://divaservices.unifr.ch/api/v2/">http://divaservices.unifr.ch/api/v2/</a>) provides information about all available methods. The response will look as&nbsp;follows:</p>
+<pre><code class="lang-JSON">[
+  {
+    <span class="attr">"name"</span>: <span class="string">"Otsu Binarization"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Otsu Binarization"</span>,
+    <span class="attr">"type"</span>: <span class="string">"binarization"</span>,
+    <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/binarization/otsubinarization/1"</span>
+  },
+  {
+    <span class="attr">"name"</span>: <span class="string">"<span class="caps">HOOSC</span> Feature Extraction"</span>,
+    <span class="attr">"description"</span>: <span class="string">"This code extracts Histogram of Orientation Shape Context (<span class="caps">HOOSC</span>) local shape descriptor from an input hieroglyph image."</span>,
+    <span class="attr">"type"</span>: <span class="string">"imageprocessing"</span>,
+    <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/imageprocessing/hooscfeatureextraction/1"</span>
+  }
+]
+</code></pre>
+<p>Each method is described in an object containing the following four data&nbsp;points:</p>
+<ul>
+<li><code>name</code>: The name of the&nbsp;method</li>
+<li><code>description</code>: A description of the&nbsp;method</li>
+<li><code>type</code>: A classification of the type of the&nbsp;method</li>
+<li><code>url</code>: The <span class="caps">URL</span> pointing to the endpoint for the&nbsp;method</li>
+</ul>
+<h2 id="method-endpoints">Method&nbsp;Endpoints</h2>
+<h3 id="get-type-methodname"><span class="caps">GET</span>&nbsp;/:type/:methodname</h3>
+<p>Provides information about a specific information. The response looks as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"general"</span>: {
+    <span class="attr">"name"</span>: <span class="string">"Otsu Binarization"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Otsu Binarization"</span>,
+    <span class="attr">"developer"</span>: <span class="string">"Marcel Würsch"</span>,
+    <span class="attr">"affiliation"</span>: <span class="string">"University of Fribourg"</span>,
+    <span class="attr">"email"</span>: <span class="string">"marcel.wuersch@unifr.ch"</span>,
+    <span class="attr">"author"</span>: <span class="string">"Marcel Würsch"</span>,
+    <span class="attr">"<span class="caps">DOI</span>"</span>: <span class="string">"10.1117/12.783598"</span>,
+    <span class="attr">"type"</span>: <span class="string">"binarization"</span>,
+    <span class="attr">"license"</span>: <span class="string">"Other"</span>,
+    <span class="attr">"ownsCopyright"</span>: <span class="string">"1"</span>,
+    <span class="attr">"expectedRuntime"</span>: <span class="number">2.258397932816539</span>,
+    <span class="attr">"executions"</span>: <span class="number">387</span>
+  },
+  <span class="attr">"input"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"inputImage"</span>,
+        <span class="attr">"description"</span>: <span class="string">"The input image to binarize"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>,
+          <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+              <span class="string">"image/jpeg"</span>,
+              <span class="string">"image/png"</span>,
+              <span class="string">"image/tiff"</span>
+            ],
+            <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+          }
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+      }
+    },
+    {
+      <span class="attr">"outputFolder"</span>: {
+        <span class="attr">"userdefined"</span>: <span class="literal">false</span>
+      }
+    }
+  ],
+  <span class="attr">"output"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"otsuBinaryImage"</span>,
+        <span class="attr">"type"</span>: <span class="string">"image"</span>,
+        <span class="attr">"description"</span>: <span class="string">"Generated Binary Image"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+              <span class="string">"image/jpeg"</span>,
+              <span class="string">"image/png"</span>,
+              <span class="string">"image/tiff"</span>
+            ],
+            <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+          },
+          <span class="attr">"colorspace"</span>: <span class="string">"binary"</span>,
+          <span class="attr">"visualization"</span>: <span class="literal">true</span>
+        }
+      }
+    }
+  ]
+}
+</code></pre>
+<p>The <span class="caps">JSON</span> object is built of the following&nbsp;structure:</p>
+<ul>
+<li><code>general</code>: Contains general information about the method (e.g. author of the method, or <span class="caps">DOI</span> for referencing in scientific&nbsp;publications)</li>
+<li><code>input</code>: A <span class="caps">JSON</span> array specifying the inputs required by the&nbsp;method.</li>
+<li><code>output</code>: A <span class="caps">JSON</span> array specifiying the outputs generated by the&nbsp;method.</li>
+</ul>
+<p>The <code>input</code> and <code>output</code> array are further specified in the Tutorial on <a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and&nbsp;Outputs</a></p>
+<h3 id="post-type-methodname"><span class="caps">POST</span>&nbsp;/:type/:methodname</h3>
+<p>A <span class="caps">POST</span> request to the URL of a method starts the execution of a method.
+The POST request needs to contain a <code>request-body</code> that contains all necessary data needed by the&nbsp;method.</p>
+<h4 id="request-body">Request-Body</h4>
+<p><strong>Important:</strong> All <span class="caps">POST</span> request need to set the <code>content-type</code> to <code>application/json</code>. Otherwise they will be rejected by&nbsp;DIVAServices.</p>
+<p>The <code>request-body</code> has the following&nbsp;structure:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"parameters"</span>:{},
+  <span class="attr">"data"</span>:[
+    {
+    }
+  ]
+}
+</code></pre>
+<p>The <code>parameter</code> object will contain all regular parameter values, and the <code>data</code> array all input data related information. For mor information check out the tutorial on <a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and Outputs</a>.</p>
+<h4 id="request-response">Request-Response</h4>
+<p>The <span class="caps">POST</span> request will return an immediate response with the following&nbsp;structure:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"results"</span>: [
+    {
+      <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/majorknowledgeableconey/data_0/data_0.json"</span>
+      }
+  ],
+  <span class="attr">"statusCode"</span>: <span class="number">202</span>
+}
+</code></pre>
+<p>The <code>results</code> array will contain an object with a <code>resultLink</code> for each <code>data</code> element that was used in the <span class="caps">POST</span> request. This <code>resultLink</code> <span class="caps">URL</span> will contain the actual result of the specific method&nbsp;call.</p>
+<h4 id="fetching-for-results">Fetching For&nbsp;Results</h4>
+<p>Since the requests are executed asynchronously, the client will have to poll for the results. As stated above, the client will receive a <span class="caps">JSON</span> response to the POST request that starts the execution of the&nbsp;method.</p>
+<p>The response will either containt <code>status: &quot;planned&quot;</code> or <code>status: &quot;done&quot;</code> which can be used to identify whether or not the execution is&nbsp;finished.</p>
+<p>The following Python and JavaScript functions serve as examples how polling can&nbsp;work:</p>
+<p><strong>Python</strong></p>
+<pre><code class="lang-Python"><span class="function"><span class="keyword">def</span> <span class="title">pollResult</span><span class="params">(self, result_link)</span>:</span>
+    <span class="string">""" Polls for the result of the execution in 1s intervals 
+    Arguments:
+        result_link {string} -- [the resultLink generated by the <span class="caps">POST</span> request that started the execution]
+
+    Returns:
+        [json] -- [the result of the execution]
+    """</span>
+
+    response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">while</span>(response[<span class="string">'status'</span>] != <span class="string">'done'</span>):
+        <span class="keyword">if</span>(response[<span class="string">'status'</span>] == <span class="string">'error'</span>):
+            sys.stderr.write(<span class="string">'Error in executing the request. See the log file at: '</span> + response[<span class="string">'output'</span>][<span class="number">0</span>][<span class="string">'file'</span>][<span class="string">'url'</span>])
+            sys.exit()
+        time.sleep(<span class="number">1</span>)
+        response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">return</span> response
+
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<pre><code class="lang-JavaScript"><span class="comment">/**
+  * 
+  * Fetch the result from a given url
+  * Polls for the result every 1000ms (1s)
+  *  
+ * */</span>
+<span class="function"><span class="keyword">function</span> <span class="title">getResult</span>(<span class="params">url</span>) </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> {
+        fetch(url, {
+            <span class="attr">method</span>: <span class="string">"<span class="caps">GET</span>"</span>
+        }).then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>{
+            <span class="keyword">return</span> res.json();
+        }).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>{
+            <span class="keyword">if</span> (data.status === <span class="string">"done"</span>) {
+                resolve(data);
+            } <span class="keyword">else</span> {
+                setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+                    resolve(getResult(url));
+                }, <span class="number">1000</span>);
+            }
+        })
+    })
+}
+</code></pre>
+<h4 id="example">Example</h4>
+<p>The following <code>request-body</code>can be used to execute the <a href="http://divaservices.unifr.ch/api/v2/binarization/otsubinarization/1">Otsu Binarization</a> on&nbsp;DIVAServices.</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"parameters"</span>:{},
+  <span class="attr">"data"</span>:[
+    {
+      <span class="attr">"inputImage"</span>:<span class="string">"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg"</span>
+      }
+  ]
+}
+</code></pre>
 </section>
       </div>
     </div>
