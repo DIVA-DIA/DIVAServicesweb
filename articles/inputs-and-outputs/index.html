@@ -34,15 +34,19 @@
     <div class="container md-content">
       <div class="larger">
         <aside>
-          <h2>Basic</h2>
+          <h2>Basic Information</h2>
           <ul>
             <li><a href="/DIVAServicesweb/articles/core">Core Principles</a></li>
             <li><a href="/DIVAServicesweb/articles/architecture">Architecture</a></li>
-            <li><a href="/DIVAServicesweb/articles/basic-example">Basic Example</a></li>
             <li><a href="/DIVAServicesweb/articles/api">API Endpoints</a></li>
+            <li><a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and Outputs</a></li>
           </ul>
-          <h2>Intermediate</h2>
-          <h2>Advanced</h2>
+          <h2>Beginner Tutorials</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/basic-example">Basic Example</a></li>
+          </ul>
+          <h2>Intermediate Tutorials</h2>
+          <h2>Advanced Tutorials</h2>
           <ul>
             <li><a href="/DIVAServicesweb/articles/provide-your-method">Provide your method</a></li>
           </ul>
@@ -51,7 +55,197 @@
             <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
           </ul>
         </aside>
-        <section class="md-container"><p>#Coming&nbsp;Soon</p>
+        <section class="md-container"><h1 id="inputs-and-outputs-specification">Inputs and Outputs&nbsp;Specification</h1>
+<p>DIVAServices can handle a variety of inputs and outputs. In this Tutorial we describe what Inputs and Outputs are available, how they are specified and how to create requests based off of&nbsp;them.</p>
+<p>A <a href="http://json-schema.org/"><span class="caps">JSON</span>-Schema</a> is available <a href="https://github.com/lunactic/DIVAServices/blob/development/conf/schemas/detailsAlgorithmSchema.json">here</a> that describes&nbsp;it.</p>
+<h2 id="inputs">Inputs</h2>
+<p>The following <code>input</code> types are available and are described&nbsp;below:</p>
+<ul>
+<li><code>file</code>: A regular file as&nbsp;input</li>
+<li><code>folder</code>: A complete collection as&nbsp;input</li>
+<li><code>number</code>: A numeric&nbsp;input</li>
+<li><code>select</code>: A string input based from a&nbsp;selection</li>
+<li><code>outputFolder</code>: A path to a folder where output data can be&nbsp;stored</li>
+<li><code>text</code>: A string&nbsp;input</li>
+</ul>
+<h2 id="general-information">General&nbsp;Information</h2>
+<p>The inputs needed for a method are specified in the <code>inputs</code> array when creating a <span class="caps">GET</span> request to a specific&nbsp;method.</p>
+<p>For inputs where the <code>userdefined</code> value is set to <code>true</code>, the client <span class="caps">HAS</span> TO provide information in the POST request when calling the method. Inputs where <code>userdefined</code> is <code>false</code>, DIVAServices will automatically provide&nbsp;information.</p>
+<p>When creating the <span class="caps">POST</span> requests, all regular parameters (number, select, text, etc) go into the <code>parameters</code> object. Values for data elements (file, folder) go into the <code>data</code> array.</p>
+<p>The <code>name</code> of an input is also the <code>identifier</code> that <span class="caps">HAS</span> TO be used when providing the information. This shows, that for each specified <code>input</code> a corresponding entry with the same <code>name</code> as key has to be provided in the <span class="caps">POST</span> request either in the <code>parameters</code> or a <code>data</code> object.</p>
+<p><strong>Example</strong></p>
+<p>For the following input specification of a&nbsp;number:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"number"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"threshold"</span>,
+        <span class="attr">"description"</span>: <span class="string">"threshold for receiving only 'strong' features"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>,
+          <span class="attr">"default"</span>: <span class="number">0.000001</span>,
+          <span class="attr">"min"</span>: <span class="number">0</span>,
+          <span class="attr">"max"</span>: <span class="number">1</span>,
+          <span class="attr">"steps"</span>: <span class="number">0.000001</span>
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<p>The client will have to provide the information as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    &quot;parameters&quot;:{
+        &quot;threshold&quot;:0.000001,
+        ...
+    },
+    &quot;data&quot;:[
+        ...
+    ]
+}
+</code></pre>
+<h3 id="file">File</h3>
+<p>The structure for a <code>file</code> description looks as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"inputImage"</span>,
+        <span class="attr">"description"</span>: <span class="string">"The input image to binarize"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>,
+          <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+              <span class="string">"image/jpeg"</span>,
+              <span class="string">"image/png"</span>,
+              <span class="string">"image/tiff"</span>
+            ],
+            <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+          }
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+      }
+    }
+</code></pre>
+<p>The following information is&nbsp;specified:</p>
+<ul>
+<li><code>name</code>: the identifier of this&nbsp;parameter</li>
+<li><code>description</code>: A short description of the&nbsp;parameter</li>
+<li><code>options:mimeTypes</code>: Specifies which mimeTypes can be provided to this&nbsp;input</li>
+</ul>
+<h4 id="using-in-post-request">Using in <span class="caps">POST</span>&nbsp;request</h4>
+<p><code>file</code> Information has to be provided within a <code>data</code> object in the <span class="caps">POST</span> request. The client can specify which <code>file</code> to use by providing its DIVAServices identifier (combination of the name of the collection and the&nbsp;filename).</p>
+<p><strong>Example</strong></p>
+<p>The above specified file could be used in the following&nbsp;way:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"parameters"</span>:{},
+    <span class="attr">"data"</span>:[
+        {
+            <span class="attr">"inputImage"</span>: <span class="string">"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg"</span>
+        }
+    ]
+}
+</code></pre>
+<h3 id="folder">Folder</h3>
+<p>A <code>folder</code> specifies to use the contents of a complete collection. The structure of a <code>folder</code> specification is as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"folder"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"inputData"</span>,
+        <span class="attr">"description"</span>: <span class="string">"The input collection (needs to contain the ground truth *.gt.txt, and input text lines *.bin.png files)"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">false</span>
+    }
+}
+</code></pre>
+<h4 id="using-in-post-request">Using in <span class="caps">POST</span>&nbsp;request</h4>
+<p><code>folder</code> information has to be provided within a <code>data</code> object in the <span class="caps">POST</span> request. The client can specify which <code>folder</code> to use by providing the <code>name</code> of a&nbsp;collection.</p>
+<p><strong>Example</strong></p>
+<pre><code class="lang-JSON">{
+    &quot;data&quot;:[
+        {
+            &quot;inputData&quot;:&quot;ocr_train_example&quot;
+        }
+    ],
+    &quot;parameters&quot;:{
+        ...
+    }
+}
+</code></pre>
+<h3 id="number">Number</h3>
+<p>A <code>number</code> specifies a numeric input. This numeric input can be further specified using <code>min</code>, <code>max</code> and <code>steps</code>. In <span class="caps">JSON</span> it is specified as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"number"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"lineHeight"</span>,
+        <span class="attr">"description"</span>: <span class="string">"the default line height"</span>,
+        <span class="attr">"options"</span>: {
+            <span class="attr">"required"</span>: <span class="literal">true</span>,
+            <span class="attr">"default"</span>: <span class="number">46</span>,
+            <span class="attr">"min"</span>: <span class="number">10</span>,
+            <span class="attr">"max"</span>: <span class="number">120</span>,
+            <span class="attr">"steps"</span>: <span class="number">1</span>
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<p>The following information is&nbsp;specified:</p>
+<ul>
+<li><code>name</code>: The identifier of the&nbsp;input</li>
+<li><code>description</code>: A short description of the&nbsp;input</li>
+<li><code>options:default</code>: The default value to use for this&nbsp;input</li>
+<li><code>options:min</code>: The minimal value that can be used for this&nbsp;input</li>
+<li><code>options:max</code>: The maximal value that can be used for this&nbsp;input</li>
+<li><code>options:steps</code>: The stepsize between two possible&nbsp;values</li>
+</ul>
+<h4 id="using-in-post-request">Using in <span class="caps">POST</span>&nbsp;request</h4>
+<p>Values for a <code>number</code> input have to be provided in the <code>parameters</code> object. The key needs to be the <code>name</code> of the input&nbsp;parameter.</p>
+<p><strong>Example</strong></p>
+<p>The above described <code>number</code> input could be used as follows in a <span class="caps">POST</span>&nbsp;request:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"data"</span>:[
+        ...
+    ],
+    <span class="attr">"parameters"</span>:{
+        <span class="attr">"lineHeight"</span>:<span class="number">46</span>
+    }
+}
+</code></pre>
+<h3 id="select">Select</h3>
+<p>A <code>select</code> input specifies a selection of various variables that can be selected. In <span class="caps">JSON</span> it is specified as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"select"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"detector"</span>,
+        <span class="attr">"description"</span>: <span class="string">"The Interest Point detector to use"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>,
+          <span class="attr">"values"</span>: [
+            <span class="string">"Harris"</span>,
+            <span class="string">"Hessian"</span>,
+            <span class="string">"Laplace"</span>,
+            <span class="string">"Quadrature"</span>,
+            <span class="string">"Ridge"</span>
+          ],
+          <span class="attr">"default"</span>: <span class="string">"Harris"</span>
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<h4 id="using-in-post-request">Using in <span class="caps">POST</span>&nbsp;request</h4>
+<p>Values for a <code>select</code> input have to be provided in the <code>parameters</code> object. The key needs to be the <code>select</code> of the input&nbsp;parameter.</p>
+<p><strong>Example</strong></p>
+<p>The above specified <code>select</code> could be used as follows in a <span class="caps">POST</span>&nbsp;request:</p>
+<pre><code class="lang-JSON">{
+    &quot;parameters&quot;:{
+        &quot;detector&quot;:&quot;Harris&quot;,
+        ...
+    },
+    &quot;data&quot;:[
+        ...
+    ]
+}
+</code></pre>
+<h3 id="outputfolder">OutputFolder</h3>
+<p>The <code>outputFolder</code> specifies a folder to the method where it can store its outputs. The client does not need to provide any information for this value as it is automatically provided by&nbsp;DIVAServices.</p>
+<h3 id="example">Example</h3>
+<h2 id="outputs">Outputs</h2>
 </section>
       </div>
     </div>
