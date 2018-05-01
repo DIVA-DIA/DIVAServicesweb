@@ -2,6 +2,20 @@
 title: Inputs and Outputs
 template: article.jade
 ---
+- [Inputs and Outputs Specification](#inputs-and-outputs-specification)
+    - [Inputs](#inputs)
+    - [General Information](#general-information)
+        - [File](#file)
+            - [Using in POST request](#using-in-post-request)
+        - [Folder](#folder)
+            - [Using in POST request](#using-in-post-request)
+        - [Number](#number)
+            - [Using in POST request](#using-in-post-request)
+        - [Select](#select)
+            - [Using in POST request](#using-in-post-request)
+        - [OutputFolder](#outputfolder)
+        - [Example](#example)
+    - [Outputs](#outputs)
 
 # Inputs and Outputs Specification
 DIVAServices can handle a variety of inputs and outputs. In this Tutorial we describe what Inputs and Outputs are available, how they are specified and how to create requests based off of them.
