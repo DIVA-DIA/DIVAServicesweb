@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Execute your First method - DIVAServices
+    </title>
+    <link rel="stylesheet" href="/DIVAServicesweb/styles/main.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container nav">
+      <div class="larger">
+        <nav>
+          <ul class="left">
+            <li><a href="/DIVAServicesweb/">DIVAServices</a></li>
+          </ul>
+          <ul class="right">
+            <li><a href="/DIVAServicesweb/articles.html">Tutorials</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="container header">
+      <div class="larger">
+        <header class="is-small">
+          <h2>Execute your First method</h2>
+        </header>
+      </div>
+    </div>
+    <div class="container md-content">
+      <div class="larger">
+        <aside>
+          <h2>Basic Information</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/core">Core Principles</a></li>
+            <li><a href="/DIVAServicesweb/articles/architecture">Architecture</a></li>
+            <li><a href="/DIVAServicesweb/articles/api">API Endpoints</a></li>
+            <li><a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and Outputs</a></li>
+            <li><a href="/DIVAServicesweb/articles/data-management">Data Management</a></li>
+          </ul>
+          <h2>Beginner Tutorials</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/first-execution">Execute your first method</a></li>
+          </ul>
+          <h2>Intermediate Tutorials</h2>
+          <h2>Advanced Tutorials</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/provide-your-method">Provide your method</a></li>
+          </ul>
+          <h2>Applications</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
+          </ul>
+        </aside>
+        <section class="md-container"><h1 id="execute-your-first-method-on-divaservices">Execute your first method on&nbsp;DIVAServices</h1>
+<p>As discussed in the <a href="/DIVAServicesweb/articles/architecture">Architecture</a> article, methods on DIVAServices are executed using <span class="caps">HTTP</span> POST request.
+In this Tutorial we want to execute a first simple method on DIVAServices.
+This method requires one input file and produces one output&nbsp;file.</p>
+<p>For this Tutorial we will use the <a href="http://divaservices.unifr.ch/api/v2/enhancement/grayification/1">Grayification Method</a>.</p>
+<h2 id="interpreting-the-get-request-information">Interpreting the <span class="caps">GET</span> request&nbsp;information</h2>
+<p>A <span class="caps">GET</span> request (with the browser or any other application) to the URL of the method (see link above), will return the following information in&nbsp;JSON:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"general"</span>: {
+    <span class="attr">"name"</span>: <span class="string">"Grayification"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Image Grayification"</span>,
+    <span class="attr">"developer"</span>: <span class="string">"Manuel Bouillon"</span>,
+    <span class="attr">"affiliation"</span>: <span class="string">"University of Fribourg"</span>,
+    <span class="attr">"email"</span>: <span class="string">"manuel.bouillon@unifr.ch"</span>,
+    <span class="attr">"author"</span>: <span class="string">"Manuel Bouillon"</span>,
+    <span class="attr">"type"</span>: <span class="string">"enhancement"</span>,
+    <span class="attr">"license"</span>: <span class="string">"Other"</span>,
+    <span class="attr">"ownsCopyright"</span>: <span class="string">"1"</span>,
+    <span class="attr">"expectedRuntime"</span>: <span class="number">14.321428571428571</span>,
+    <span class="attr">"executions"</span>: <span class="number">28</span>
+  },
+  <span class="attr">"input"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"inputImage"</span>,
+        <span class="attr">"description"</span>: <span class="string">"The input image to transform"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"required"</span>: <span class="literal">true</span>,
+          <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+              <span class="string">"image/jpeg"</span>,
+              <span class="string">"image/png"</span>,
+              <span class="string">"image/tiff"</span>
+            ],
+            <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+          }
+        },
+        <span class="attr">"userdefined"</span>: <span class="literal">true</span>
+      }
+    },
+    {
+      <span class="attr">"outputFolder"</span>: {
+        <span class="attr">"userdefined"</span>: <span class="literal">false</span>
+      }
+    }
+  ],
+  <span class="attr">"output"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"grayImage"</span>,
+        <span class="attr">"type"</span>: <span class="string">"image"</span>,
+        <span class="attr">"description"</span>: <span class="string">"Generated Grayscale Image"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+              <span class="string">"image/jpeg"</span>,
+              <span class="string">"image/png"</span>
+            ],
+            <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+          },
+          <span class="attr">"colorspace"</span>: <span class="string">"grayscale"</span>,
+          <span class="attr">"visualization"</span>: <span class="literal">true</span>
+        }
+      }
+    }
+  ]
+}
+</code></pre>
+<p>In order to execute the method, two parts are important, the <code>input</code> and the <code>output</code> array.
+These specify what kind of inputs the method requires and what kind of outputs it produces.
+For more information there is the article on <a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and&nbsp;Outputs</a></p>
+<p>For this tutorial we need to know that the method requires the following&nbsp;inputs:</p>
+<ul>
+<li>An input <code>file</code> specified in <code>inputImage</code> that needs to be either a <span class="caps">JPEG</span>, a PNG, or a&nbsp;TIFF.</li>
+<li>An <code>outputFolder</code> that will automatically be provided by DIVAServices (as <code>userdefined</code> is <code>false</code>).</li>
+</ul>
+<p>And the method will produce as&nbsp;output:</p>
+<ul>
+<li>A <code>file</code> that is an <code>image</code>, which is either a <span class="caps">JPEG</span>, a PNG, or a TIFF, that could be used by a third-party system as a <code>visualization</code>.</li>
+</ul>
+<h2 id="generating-the-post-request">Generating the <span class="caps">POST</span>&nbsp;request</h2>
+<p>With the information from the <span class="caps">GET</span> request we can put together the POST request for executing the&nbsp;method.</p>
+<p>For the <code>inputImage</code> we need the <em>DIVAServices identifier</em> for the image to binarize. Details for getting this are describe in the Tutorial on <a href="/DIVAServicesweb/articles/first-execution">Data Management</a>.
+For this Tutorial we use the identifier <code>testCollection/ubb-A-II-0004_0002r.jpeg</code> which points to <a href="http://divaservices.unifr.ch/api/v2/files/testCollection/original/ubb-A-II-0004_0002r.jpeg">this</a> image.
+And we need to remember, that information about data elements goes into the <code>data</code> part of the <code>request-body</code> of the <span class="caps">POST</span>&nbsp;request.</p>
+<p>So the <span class="caps">POST</span> request will look like&nbsp;this:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"parameters"</span>:{},
+    <span class="attr">"data"</span>:[
+        {
+            <span class="attr">"inputImage"</span>: <span class="string">"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg"</span>
+        }
+    ]
+}
+</code></pre>
+<p>This returns the immediate&nbsp;response:</p>
+<pre><code class="lang-JSON">{
+    <span class="attr">"results"</span>: [
+        {
+            <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/data_0.json"</span>
+        }
+    ],
+    <span class="attr">"collection"</span>: <span class="string">"genuinetubbycero"</span>,
+    <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero.json"</span>
+}
+</code></pre>
+<p>And when polling for the <code>resultLink</code> inside the <code>results</code> array you will get the following result of the&nbsp;method:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"output"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"grayImage"</span>,
+        <span class="attr">"type"</span>: <span class="string">"image"</span>,
+        <span class="attr">"description"</span>: <span class="string">"Generated Grayscale Image"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"colorspace"</span>: <span class="string">"grayscale"</span>,
+          <span class="attr">"visualization"</span>: <span class="literal">true</span>
+        },
+        <span class="attr">"mime-type"</span>: <span class="string">"image/jpeg"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/grayImage.jpeg"</span>
+      }
+    },
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"mime-type"</span>: <span class="string">"text/plain"</span>,
+        <span class="attr">"type"</span>: <span class="string">"log"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/logFile.txt"</span>,
+        <span class="attr">"name"</span>: <span class="string">"logFile.txt"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"visualization"</span>: <span class="literal">false</span>
+        }
+      }
+    }
+  ],
+  <span class="attr">"status"</span>: <span class="string">"done"</span>,
+  <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/data_0.json"</span>,
+  <span class="attr">"collectionName"</span>: <span class="string">"genuinetubbycero"</span>
+}
+</code></pre>
+<p>In the <code>output</code> array there are two <code>file</code> entries:</p>
+<ul>
+<li><code>grayImage</code>: The output image that is the result of the&nbsp;method.</li>
+<li><code>logFile</code>: The logfile of the&nbsp;method.</li>
+</ul>
+<p>Each with a <code>url</code> to the location where the file can be downloaded&nbsp;from.</p>
+<h2 id="examples">Examples</h2>
+<p>We provide the execution example for the above explanation in different programming&nbsp;languages.</p>
+<h3 id="python">Python</h3>
+<pre><code class="lang-Python"><span class="keyword">import</span> requests
+
+url = <span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>
+
+payload = <span class="string">" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>
+headers = {<span class="string">'content-type'</span>: <span class="string">'application/json'</span>}
+
+response = requests.request(<span class="string">"<span class="caps">POST</span>"</span>, url, data=payload, headers=headers)
+</code></pre>
+<p>And to poll for the result the following method can be&nbsp;used:</p>
+<pre><code class="lang-Python"><span class="function"><span class="keyword">def</span> <span class="title">pollResult</span><span class="params">(self, result_link)</span>:</span>
+    <span class="string">""" Polls for the result of the execution in 1s intervals 
+    Arguments:
+        result_link {string} -- [the resultLink generated by the <span class="caps">POST</span> request that started the execution]
+
+    Returns:
+        [json] -- [the result of the execution]
+    """</span>
+
+    response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">while</span>(response[<span class="string">'status'</span>] != <span class="string">'done'</span>):
+        <span class="keyword">if</span>(response[<span class="string">'status'</span>] == <span class="string">'error'</span>):
+            sys.stderr.write(<span class="string">'Error in executing the request. See the log file at: '</span> + response[<span class="string">'output'</span>][<span class="number">0</span>][<span class="string">'file'</span>][<span class="string">'url'</span>])
+            sys.exit()
+        time.sleep(<span class="number">1</span>)
+        response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">return</span> response
+
+</code></pre>
+<p>Where <code>result_link</code> in this case would be <code>response[&#39;outputs&#39;][0][&#39;resultLink&#39;]</code>.</p>
+<h3 id="java">Java</h3>
+<pre><code class="lang-Java">HttpResponse&lt;JSONObject&gt; response = Unirest.post(<span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>)
+  .header(<span class="string">"content-type"</span>, <span class="string">"application/json"</span>)
+  .body(<span class="string">" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>)
+  .asJSON();
+</code></pre>
+<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
+<h3 id="javascript-with-jquery-">JavaScript (with&nbsp;JQuery)</h3>
+<pre><code class="lang-JavaScript"><span class="keyword">var</span> settings = {
+  <span class="string">"async"</span>: <span class="literal">true</span>,
+  <span class="string">"crossDomain"</span>: <span class="literal">true</span>,
+  <span class="string">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>,
+  <span class="string">"method"</span>: <span class="string">"<span class="caps">POST</span>"</span>,
+  <span class="string">"headers"</span>: {
+    <span class="string">"content-type"</span>: <span class="string">"application/json"</span>
+  },
+  <span class="string">"processData"</span>: <span class="literal">false</span>,
+  <span class="string">"data"</span>:<span class="string">"{\"parameters\":{},\"data\":[{\"inputImage\":\"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>
+}
+
+$.ajax(settings).done(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>{
+  <span class="built_in">console</span>.log(response);
+});
+</code></pre>
+<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
+<h3 id="node-js">Node.js</h3>
+<pre><code class="lang-JavaScript"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">"request"</span>);
+
+<span class="keyword">var</span> options = { <span class="attr">method</span>: <span class="string">'<span class="caps">POST</span>'</span>,
+  <span class="attr">url</span>: <span class="string">'http://divaservices.unifr.ch/api/v2/enhancement/grayification/1'</span>,
+  <span class="attr">headers</span>: { <span class="string">'content-type'</span>: <span class="string">'application/json'</span> },
+  <span class="attr">body</span>: 
+   { <span class="attr">parameters</span>: {},
+     <span class="attr">data</span>: [ { <span class="attr">inputImage</span>: <span class="string">'testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg'</span> } ] },
+  <span class="attr">json</span>: <span class="literal">true</span> };
+
+request(options, <span class="function"><span class="keyword">function</span> (<span class="params">error, response, body</span>) </span>{
+  <span class="keyword">if</span> (error) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(error);
+  <span class="built_in">console</span>.log(body);
+});
+
+</code></pre>
+<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
+</section>
+      </div>
+    </div>
+    <hr class="clear">
+    <div class="container footer">
+      <div class="larger">
+        <footer>
+          <p><span>Made by </span><a href="https://diuf.unifr.ch/main/diva/" target="_blank">DIVA Group</a><span>.</span></p>
+          <p>University of Fribourg (Switzerland)</p>
+        </footer>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js"></script>
+  </body>
+</html>

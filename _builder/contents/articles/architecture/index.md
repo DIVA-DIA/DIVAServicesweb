@@ -36,14 +36,14 @@ Because some methods can take a long time until they are executed, DIVAServices 
 Whenever a method execution is started, the client immediately receives a JSON response as follows:
 ```JSON
 {
-	"results": [
-		{
-			"resultLink": "http://divaservices.unifr.ch/api/v2/results/victoriousabandonedbassethound/data_0/data_0.json"
-		}
-    ],
-    ...
-	"status": "done",
-	"statusCode": 202
+  "results": [
+    {
+      "resultLink": "http://divaservices.unifr.ch/api/v2/results/victoriousabandonedbassethound/data_0/data_0.json"
+    }
+  ],
+  ...
+  "status": "done",
+  "statusCode": 202
 }
 ```
 The client that started the execution has then to consistenly poll the `results:resultLink` URL(s). Once an execution is finished this GET request will respond with a JSON object like the following:
