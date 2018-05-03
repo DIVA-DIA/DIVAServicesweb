@@ -79,7 +79,16 @@
 <li><a href="#example">Example</a></li>
 </ul>
 </li>
-<li><a href="#outputs">Outputs</a></li>
+<li><a href="#outputs">Outputs</a><ul>
+<li><a href="#file">File</a><ul>
+<li><a href="#options-for-a-file">Options for a&nbsp;file</a></li>
+<li><a href="#example">Example</a></li>
+</ul>
+</li>
+<li><a href="#folder">Folder</a></li>
+<li><a href="#other-outputs">Other&nbsp;outputs</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -273,7 +282,226 @@
 <h3 id="outputfolder">OutputFolder</h3>
 <p>The <code>outputFolder</code> specifies a folder to the method where it can store its outputs. The client does not need to provide any information for this value as it is automatically provided by&nbsp;DIVAServices.</p>
 <h3 id="example">Example</h3>
+<p>The following is a complete example of a method specification provided by DIVAServices.
+The method specifies the following&nbsp;parameters:</p>
+<ul>
+<li><code>inputImage</code>: A <code>file</code> input&nbsp;parameer</li>
+<li><code>outputFolder</code>: An <code>outputFolder</code> input&nbsp;parameter</li>
+<li><code>threshold</code>, <code>maxFeaturesPerScale</code>, <code>blurSigma</code>, <code>numScales</code>, <code>numOctaves</code>: <code>number</code> input&nbsp;parameters</li>
+<li><code>detector</code>: A <code>select</code> input&nbsp;parameter</li>
+</ul>
+<pre><code class="lang-JSON">{
+  &quot;general&quot;: {
+      ...
+  },
+  &quot;input&quot;: [
+    {
+      &quot;file&quot;: {
+        &quot;name&quot;: &quot;inputImage&quot;,
+        &quot;description&quot;: &quot;The input image to segment&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;mimeTypes&quot;: {
+            &quot;allowed&quot;: [
+              &quot;image/jpeg&quot;,
+              &quot;image/png&quot;,
+              &quot;image/tiff&quot;
+            ],
+            &quot;default&quot;: &quot;image/jpeg&quot;
+          }
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;outputFolder&quot;: {
+        &quot;userdefined&quot;: false
+      }
+    },
+    {
+      &quot;number&quot;: {
+        &quot;name&quot;: &quot;threshold&quot;,
+        &quot;description&quot;: &quot;threshold for receiving only &#39;strong&#39; features&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;default&quot;: 0.000001,
+          &quot;min&quot;: 0,
+          &quot;max&quot;: 1,
+          &quot;steps&quot;: 0.000001
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;number&quot;: {
+        &quot;name&quot;: &quot;maxFeaturesPerScale&quot;,
+        &quot;description&quot;: &quot;Maximum features per scale&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;default&quot;: -1,
+          &quot;min&quot;: -1,
+          &quot;max&quot;: 1500,
+          &quot;steps&quot;: 1
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;select&quot;: {
+        &quot;name&quot;: &quot;detector&quot;,
+        &quot;description&quot;: &quot;The Interest Point detector to use&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;values&quot;: [
+            &quot;Harris&quot;,
+            &quot;Hessian&quot;,
+            &quot;Laplace&quot;,
+            &quot;Quadrature&quot;,
+            &quot;Ridge&quot;
+          ],
+          &quot;default&quot;: 0
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;number&quot;: {
+        &quot;name&quot;: &quot;blurSigma&quot;,
+        &quot;description&quot;: &quot;Amount of initial blur applied to the image&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;default&quot;: 1,
+          &quot;steps&quot;: 0.1
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;number&quot;: {
+        &quot;name&quot;: &quot;numScales&quot;,
+        &quot;description&quot;: &quot;Number of scales per octave&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;default&quot;: 5,
+          &quot;min&quot;: 2,
+          &quot;max&quot;: 6,
+          &quot;steps&quot;: 1
+        },
+        &quot;userdefined&quot;: true
+      }
+    },
+    {
+      &quot;number&quot;: {
+        &quot;name&quot;: &quot;numOctaves&quot;,
+        &quot;description&quot;: &quot;number of octaves computed.  Each consecutive octave is composed of numScales images which have half the resolution of the previous.&quot;,
+        &quot;options&quot;: {
+          &quot;required&quot;: true,
+          &quot;default&quot;: 3,
+          &quot;min&quot;: 2,
+          &quot;max&quot;: 5,
+          &quot;steps&quot;: 1
+        },
+        &quot;userdefined&quot;: true
+      }
+    }
+  ],
+  &quot;output&quot;: [
+   ...
+  ]
+}
+</code></pre>
 <h2 id="outputs">Outputs</h2>
+<p>The following ‘output’ type(s) are produce by DIVAServices and are described&nbsp;below:</p>
+<ul>
+<li><code>file</code>: An output file that is generated by the method. This can be any sort of file (image, xml, json, csv, txt, etc.). <code>options</code> are available to specify the output file in more&nbsp;details.</li>
+<li><code>folder</code>: An output folder that contains multiple&nbsp;files. </li>
+</ul>
+<p><strong>Note</strong>: As we are in the process of specifying server-side workflows on DIVAServices, this list might change in the&nbsp;future.</p>
+<h3 id="file">File</h3>
+<p>An output <code>file</code> can represent any arbitrary file that will be produced by a method running on DIVAServices. The general <span class="caps">JSON</span> structure for an output file is as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"file"</span>: {
+    <span class="attr">"name"</span>: <span class="string">"otsuBinaryImage"</span>,
+    <span class="attr">"type"</span>: <span class="string">"image"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Generated Binary Image"</span>,
+    <span class="attr">"options"</span>: {
+      <span class="attr">"mimeTypes"</span>: {
+        <span class="attr">"allowed"</span>: [
+          <span class="string">"image/jpeg"</span>,
+          <span class="string">"image/png"</span>,
+          <span class="string">"image/tiff"</span>
+        ],
+        <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+      },
+      <span class="attr">"colorspace"</span>: <span class="string">"binary"</span>,
+      <span class="attr">"visualization"</span>: <span class="literal">true</span>
+    }
+  }
+}
+</code></pre>
+<p>The following information is&nbsp;specified:</p>
+<ul>
+<li><code>name</code>: the identifier of the output file. In the result <span class="caps">JSON</span> of the method you will find a <code>file</code> entry with the same <code>name</code>.</li>
+<li><code>type</code>:  a specification of the output type (e.g. image, model, etc.) This will be further specified in the&nbsp;future.</li>
+<li><code>description</code>: A description of the output&nbsp;file.</li>
+<li><code>options</code> Specifying more options about this output file (see&nbsp;below)</li>
+</ul>
+<h4 id="options-for-a-file">Options for a&nbsp;file</h4>
+<p>the <code>options</code> object further specifies the output file.
+The following information will always be&nbsp;available:</p>
+<ul>
+<li><code>mimeTypes</code>: An object specifying which <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types"><span class="caps">MIME</span> types</a> can be produced (in the <code>allowed</code> array) and which <span class="caps">MIME</span> type should be assumed as a <code>default</code>.</li>
+<li><code>visualization</code>: specifies whether or not this output file could be used by a third-party program to be used as a visualization of the methods&nbsp;results.</li>
+</ul>
+<p>Additionaly for specific <code>type</code>s of output files we envision additional information in the options,&nbsp;e.g:</p>
+<p>for the <code>image</code> type:</p>
+<ul>
+<li><code>colorspace</code>: specifying the colorspace of the output&nbsp;image</li>
+<li><code>channels</code>: providing information about number of&nbsp;channels</li>
+</ul>
+<p>We plan to work on this in the near future to provide a more exhaustive list of <code>option</code>s.</p>
+<h4 id="example">Example</h4>
+<p>The following is a specification for an output <code>file</code> of a&nbsp;method:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"file"</span>: {
+    <span class="attr">"name"</span>: <span class="string">"grayImage"</span>,
+    <span class="attr">"type"</span>: <span class="string">"image"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Generated Grayscale Image"</span>,
+    <span class="attr">"options"</span>: {
+      <span class="attr">"mimeTypes"</span>: {
+        <span class="attr">"allowed"</span>: [
+          <span class="string">"image/jpeg"</span>,
+          <span class="string">"image/png"</span>
+        ],
+        <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+      },
+      <span class="attr">"colorspace"</span>: <span class="string">"grayscale"</span>,
+      <span class="attr">"visualization"</span>: <span class="literal">true</span>
+    }
+  }
+}
+</code></pre>
+<p>This will generate the following output in the <code>output</code> array when the method is&nbsp;executed:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"file"</span>: {
+    <span class="attr">"name"</span>: <span class="string">"grayImage"</span>,
+    <span class="attr">"type"</span>: <span class="string">"image"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Generated Grayscale Image"</span>,
+    <span class="attr">"options"</span>: {
+      <span class="attr">"colorspace"</span>: <span class="string">"grayscale"</span>,
+      <span class="attr">"visualization"</span>: <span class="literal">true</span>
+    },
+    <span class="attr">"mime-type"</span>: <span class="string">"image/jpeg"</span>,
+    <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/grayImage.jpeg"</span>
+  }
+}
+</code></pre>
+<p>The information is preserved but a <span class="caps">URL</span> is made available where the resulting file can be downloaded&nbsp;from.</p>
+<h3 id="folder">Folder</h3>
+<p>A <code>folder</code> output represents a collection of multiple output files that belong together.
+The complete specification for this is currently still being worked&nbsp;out.</p>
+<h3 id="other-outputs">Other&nbsp;outputs</h3>
+<p>If your method produces outputs in a different way, feel free to get in touch with us, either by mail or creating an issue on our <a href="https://github.com/lunactic/DIVAServices/issues">Github Repository</a>.</p>
 </section>
       </div>
     </div>
