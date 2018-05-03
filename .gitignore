@@ -64,3 +64,5 @@ typings/
 
 # custom
 _builder/node_modules/
+_builder/yarn.lock
+.vscode/settings.json
