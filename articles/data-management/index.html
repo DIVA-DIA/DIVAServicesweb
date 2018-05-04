@@ -8,12 +8,12 @@
     </title>
     <link rel="stylesheet" href="/DIVAServicesweb/styles/main.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-twilight.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-okaidia.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.js"></script>
-    <sciprt src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></sciprt>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-python.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-java.js"></script>
     <div class="container nav">
@@ -42,9 +42,9 @@
           <ul>
             <li><a href="/DIVAServicesweb/articles/core">Core Principles</a></li>
             <li><a href="/DIVAServicesweb/articles/architecture">Architecture</a></li>
+            <li><a href="/DIVAServicesweb/articles/data-management">Data Management</a></li>
             <li><a href="/DIVAServicesweb/articles/api">API Endpoints</a></li>
             <li><a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and Outputs</a></li>
-            <li><a href="/DIVAServicesweb/articles/data-management">Data Management</a></li>
           </ul>
           <h2>Beginner Tutorials</h2>
           <ul>
@@ -58,6 +58,9 @@
           <h2>Applications</h2>
           <ul>
             <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
+            <li><a href="/DIVAServicesweb/articles/data">DIVAServices-Data</a></li>
+            <li><a href="/DIVAServicesweb/articles/management">DIVAServices-Management</a></li>
+            <li><a href="/DIVAServicesweb/articles/insomnia">Insomnia</a></li>
           </ul>
         </aside>
         <section class="md-container"><h1 id="handling-data-on-divaservices">Handling Data on&nbsp;DIVAServices</h1>
@@ -113,9 +116,39 @@ We currently don’t have plans to build in additional security features in orde
 <p>We plan on providing additional information about collections in the future (e.g. tags to specify the contents of a&nbsp;collection)</p>
 <h2 id="divaservices-file-identifiers">DIVAServices file&nbsp;identifiers</h2>
 <p>Each file on DIVAServices has an <code>identifier</code> this <code>identifier</code> is used to refer to data elements when executing&nbsp;methods.</p>
-<h2 id="uploading-data">Uploading&nbsp;Data</h2>
-<h3 id="uploading-a-single-file">Uploading a single&nbsp;file</h3>
+<p><strong>Example</strong></p>
+<p>The above described file could be used in the <span class="caps">POST</span> request to e.g. a binarization method as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"parameters"</span>:{},
+    <span class="attr">"data"</span>:[
+    {
+      <span class="attr">"inputImage"</span>: <span class="string">"irritatingflickeringpitbull/inverseImage.jpg"</span>
+    }
+  ]
+}
+</code></pre>
+<h2 id="creating-a-new-collection">Creating a new&nbsp;collection</h2>
+<p>New collections are created by creating a <span class="caps">POST</span> request to <code>/collections</code>.
+Collections of files can be created in different ways as described&nbsp;below.</p>
+<p><strong>Note</strong></p>
+<p>The <code>name</code> parameter is optional when creating a new collection. If provided, this <code>name</code> will be used as identifier for the new collection. Otherwise a randomly generated name is&nbsp;used.</p>
+<h3 id="files-from-a-url">Files from a&nbsp;<span class="caps">URL</span></h3>
+<p>The simples way for transferring files to DIVAServices if they are accessible through a <span class="caps">URL</span>. The request to create a new collection then looks as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"name"</span>: <span class="string">"YourCollectionName"</span>,
+  <span class="attr">"files"</span>:[
+    {
+      <span class="attr">"type"</span>:<span class="string">"url"</span>,
+      <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/bnf/bnf-lat11641/bnf-lat11641_001r.jp2/full/pct:25/0/default.jpg"</span>,
+      <span class="attr">"name"</span>:<span class="string">"bnf-lat11641_001r"</span>
+    }
+  ]
+}
+</code></pre>
+<p>This will create a collection named <code>YourCollectionName</code>.</p>
+<h3 id="file-content-inside-the-request">File content inside the&nbsp;request</h3>
 <h3 id="uploading-multiple-files">Uploading multiple&nbsp;files</h3>
+<h2 id="adding-files-to-a-collection">Adding files to a&nbsp;collection</h2>
 </section>
       </div>
     </div>

@@ -67,10 +67,53 @@ We plan on providing additional information about collections in the future (e.g
 ## DIVAServices file identifiers
 Each file on DIVAServices has an `identifier` this `identifier` is used to refer to data elements when executing methods.
 
+**Example**
+
+The above described file could be used in the POST request to e.g. a binarization method as follows:
+
+``` JSON
+{
+  "parameters":{},
+	"data":[
+    {
+      "inputImage": "irritatingflickeringpitbull/inverseImage.jpg"
+    }
+  ]
+}
+```
+
+## Creating a new collection
+New collections are created by creating a POST request to `/collections`.
+Collections of files can be created in different ways as described below.
+
+**Note**
+
+The `name` parameter is optional when creating a new collection. If provided, this `name` will be used as identifier for the new collection. Otherwise a randomly generated name is used.
+
+### Files from a URL
+The simples way for transferring files to DIVAServices if they are accessible through a URL. The request to create a new collection then looks as follows:
+
+``` JSON
+{
+  "name": "YourCollectionName",
+  "files":[
+    {
+      "type":"url",
+      "value":"http://www.e-codices.unifr.ch/loris/bnf/bnf-lat11641/bnf-lat11641_001r.jp2/full/pct:25/0/default.jpg",
+      "name":"bnf-lat11641_001r"
+    }
+  ]
+}
+```
+
+This will create a collection named `YourCollectionName`.
 
 
-## Uploading Data
+### File content inside the request
 
-### Uploading a single file
 
 ### Uploading multiple files
+
+## Adding files to a collection
+
+

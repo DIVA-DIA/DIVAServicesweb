@@ -8,12 +8,12 @@
     </title>
     <link rel="stylesheet" href="/DIVAServicesweb/styles/main.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-twilight.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-okaidia.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   </head>
   <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.js"></script>
-    <sciprt src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></sciprt>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-python.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-java.js"></script>
     <div class="container nav">
@@ -42,9 +42,9 @@
           <ul>
             <li><a href="/DIVAServicesweb/articles/core">Core Principles</a></li>
             <li><a href="/DIVAServicesweb/articles/architecture">Architecture</a></li>
+            <li><a href="/DIVAServicesweb/articles/data-management">Data Management</a></li>
             <li><a href="/DIVAServicesweb/articles/api">API Endpoints</a></li>
             <li><a href="/DIVAServicesweb/articles/inputs-and-outputs">Inputs and Outputs</a></li>
-            <li><a href="/DIVAServicesweb/articles/data-management">Data Management</a></li>
           </ul>
           <h2>Beginner Tutorials</h2>
           <ul>
@@ -58,13 +58,91 @@
           <h2>Applications</h2>
           <ul>
             <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
+            <li><a href="/DIVAServicesweb/articles/data">DIVAServices-Data</a></li>
+            <li><a href="/DIVAServicesweb/articles/management">DIVAServices-Management</a></li>
+            <li><a href="/DIVAServicesweb/articles/insomnia">Insomnia</a></li>
           </ul>
         </aside>
-        <section class="md-container"><h1 id="execute-your-first-method-on-divaservices">Execute your first method on&nbsp;DIVAServices</h1>
+        <section class="md-container"><h1 id="introduction">Introduction</h1>
+<p>In this Tutorial we introduce a first example for executing a method on DIVAServices. The goal is that after reading through this you can execute simple methods on DIVAServices&nbsp;yourself.</p>
+<p>We provide first a complete code example in Python, then provide additional information as well as code examples in other programming&nbsp;languages.</p>
+<h1 id="example-in-python">Example in&nbsp;Python</h1>
+<p>In this example we are going to turn the following color image into grayscale using a <a href="http://divaservices.unifr.ch/api/v2/enhancement/grayification/1">Grayification method</a> available on&nbsp;DIVAServices.</p>
+<p><strong>Experiment with it&nbsp;Live</strong></p>
+<ul>
+<li>An IPython Notebook is available on <a href="https://colab.research.google.com/drive/1_rLRiCR6J4KLSMafWHN1YBViHPNGfn6o">Google&nbsp;Colab</a></li>
+<li>The python script is available here, to run locally: <a href="/DIVAServicesweb/articles/first-execution/firstExecution.py">firstExecution.py</a></li>
+</ul>
+<p><img src="http://divaservices.unifr.ch/api/v2/files/testCollection/original/ubb-A-II-0004_0002r.jpeg" alt="">
+(Image Source: <a href="https://www.e-codices.unifr.ch/en/list/one/ubb/A-II-0004">Basel, Universitätsbibliothek, A <span class="caps">II</span> 4: Nycolaus de Lyra, Postilla super libros Regum et Esther (https://www.e-codices.unifr.ch/en/list/one/ubb/A-II-0004).</a>)</p>
+<p>This image is available on DIVAServices with the identifier <code>testCollection/ubb-A-II-0004_0002r.jpeg</code></p>
+<p>First we need to execute the method on DIVAServices with a <span class="caps">POST</span> request as&nbsp;follows:</p>
+<pre><code class="lang-Python"><span class="keyword">import</span> requests
+<span class="keyword">import</span> json
+
+url = <span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>
+
+payload = <span class="string">" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>
+headers = {<span class="string">'content-type'</span>: <span class="string">'application/json'</span>}
+
+response = json.loads(requests.request(<span class="string">"<span class="caps">POST</span>"</span>, url, data=payload, headers=headers).text)
+</code></pre>
+<p>The <code>response</code> of will look as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"results"</span>: [
+    {
+      <span class="attr">"resultLink"</span>:<span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/data_0.json"</span>
+    }
+  ],
+  <span class="attr">"collection"</span>: <span class="string">"genuinetubbycero"</span>,
+  <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero.json"</span>,
+  <span class="attr">"message"</span>: <span class="string">"This url is available for 24 hours"</span>,
+  <span class="attr">"status"</span>: <span class="string">"done"</span>,
+  <span class="attr">"statusCode"</span>: <span class="number">202</span>
+}
+</code></pre>
+<p>Using the <code>resultLink</code> inside the <code>results</code> array we can poll for the actual result using the following&nbsp;method:</p>
+<pre><code class="lang-python"><span class="function"><span class="keyword">def</span> <span class="title">pollResult</span><span class="params">(self, result_link)</span>:</span>
+    <span class="string">""" Polls for the result of the execution in 1s intervals 
+    Arguments:
+        result_link {string} -- [the resultLink generated by the <span class="caps">POST</span> request that started the execution]
+
+    Returns:
+        [json] -- [the result of the execution]
+    """</span>
+
+    response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">while</span>(response[<span class="string">'status'</span>] != <span class="string">'done'</span>):
+        <span class="keyword">if</span>(response[<span class="string">'status'</span>] == <span class="string">'error'</span>):
+            sys.stderr.write(<span class="string">'Error in executing the request. See the log file at: '</span> + response[<span class="string">'output'</span>][<span class="number">0</span>][<span class="string">'file'</span>][<span class="string">'url'</span>])
+            sys.exit()
+        time.sleep(<span class="number">1</span>)
+        response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
+    <span class="keyword">return</span> response
+
+</code></pre>
+<p>Where <code>result_link</code> in this case would be <code>response[&#39;outputs&#39;][0][&#39;resultLink&#39;]</code>.</p>
+<h1 id="table-of-content">Table of&nbsp;Content</h1>
+<ul>
+<li><a href="#execute-your-first-method-on-divaservices">Execute your first method on DIVAServices</a><ul>
+<li><a href="#interpreting-the-get-request-information">Interpreting the <span class="caps">GET</span> request&nbsp;information</a></li>
+<li><a href="#generating-the-post-request">Generating the <span class="caps">POST</span>&nbsp;request</a></li>
+<li><a href="#example">Example</a><ul>
+<li><a href="#running-the-request">Running the Request</a><ul>
+<li><a href="#java">Java</a></li>
+<li><a href="#nodejs">Node.js</a></li>
+</ul>
+</li>
+<li><a href="#working-with-the-result">Working with the&nbsp;result</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="execute-your-first-method-on-divaservices">Execute your first method on&nbsp;DIVAServices</h1>
 <p>As discussed in the <a href="/DIVAServicesweb/articles/architecture">Architecture</a> article, methods on DIVAServices are executed using <span class="caps">HTTP</span> POST request.
 In this Tutorial we want to execute a first simple method on DIVAServices.
 This method requires one input file and produces one output&nbsp;file.</p>
-<p>For this Tutorial we will use the <a href="http://divaservices.unifr.ch/api/v2/enhancement/grayification/1">Grayification Method</a>.</p>
 <h2 id="interpreting-the-get-request-information">Interpreting the <span class="caps">GET</span> request&nbsp;information</h2>
 <p>A <span class="caps">GET</span> request (with the browser or any other application) to the URL of the method (see link above), will return the following information in&nbsp;JSON:</p>
 <pre><code class="lang-JSON">{
@@ -205,73 +283,52 @@ And we need to remember, that information about data elements goes into the <cod
 <li><code>logFile</code>: The logfile of the&nbsp;method.</li>
 </ul>
 <p>Each with a <code>url</code> to the location where the file can be downloaded&nbsp;from.</p>
-<h2 id="examples">Examples</h2>
-<p>We provide the execution example for the above explanation in different programming&nbsp;languages.</p>
-<h3 id="python">Python</h3>
-<pre><code class="lang-Python"><span class="keyword">import</span> requests
-
-url = <span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>
-
-payload = <span class="string">" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>
-headers = {<span class="string">'content-type'</span>: <span class="string">'application/json'</span>}
-
-response = requests.request(<span class="string">"<span class="caps">POST</span>"</span>, url, data=payload, headers=headers)
-</code></pre>
-<p>And to poll for the result the following method can be&nbsp;used:</p>
-<pre><code class="lang-python"><span class="function"><span class="keyword">def</span> <span class="title">pollResult</span><span class="params">(self, result_link)</span>:</span>
-    <span class="string">""" Polls for the result of the execution in 1s intervals 
-    Arguments:
-        result_link {string} -- [the resultLink generated by the <span class="caps">POST</span> request that started the execution]
-
-    Returns:
-        [json] -- [the result of the execution]
-    """</span>
-
-    response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
-    <span class="keyword">while</span>(response[<span class="string">'status'</span>] != <span class="string">'done'</span>):
-        <span class="keyword">if</span>(response[<span class="string">'status'</span>] == <span class="string">'error'</span>):
-            sys.stderr.write(<span class="string">'Error in executing the request. See the log file at: '</span> + response[<span class="string">'output'</span>][<span class="number">0</span>][<span class="string">'file'</span>][<span class="string">'url'</span>])
-            sys.exit()
-        time.sleep(<span class="number">1</span>)
-        response = json.loads(requests.request(<span class="string">"<span class="caps">GET</span>"</span>, result_link).text)
-    <span class="keyword">return</span> response
-
-</code></pre>
-<p>Where <code>result_link</code> in this case would be <code>response[&#39;outputs&#39;][0][&#39;resultLink&#39;]</code>.</p>
-<h3 id="java">Java</h3>
+<h2 id="example">Example</h2>
+<p>In this example we want to turn the following image into grayscale using the method from&nbsp;above.</p>
+<h3 id="running-the-request">Running the&nbsp;Request</h3>
+<p>Following are examples how this request could be executed using various programming&nbsp;languages. </p>
+<h4 id="java">Java</h4>
 <pre><code class="lang-java">HttpResponse&lt;JSONObject&gt; response = Unirest.post(<span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>)
   .header(<span class="string">"content-type"</span>, <span class="string">"application/json"</span>)
   .body(<span class="string">" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>)
   .asJSON();
 </code></pre>
-<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
-<h3 id="javascript-with-jquery-">JavaScript (with&nbsp;JQuery)</h3>
-<pre><code class="lang-javascript"><span class="keyword">var</span> settings = {
-  <span class="string">"async"</span>: <span class="literal">true</span>,
-  <span class="string">"crossDomain"</span>: <span class="literal">true</span>,
-  <span class="string">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/enhancement/grayification/1"</span>,
-  <span class="string">"method"</span>: <span class="string">"<span class="caps">POST</span>"</span>,
-  <span class="string">"headers"</span>: {
-    <span class="string">"content-type"</span>: <span class="string">"application/json"</span>
-  },
-  <span class="string">"processData"</span>: <span class="literal">false</span>,
-  <span class="string">"data"</span>:<span class="string">"{\"parameters\":{},\"data\":[{\"inputImage\":\"testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg\"}]}"</span>
+<p>And polling for the result could be performed&nbsp;as:</p>
+<pre><code class="lang-java">    <span class="comment">/**
+     * Gets a result <span class="caps">JSON</span> object from the exeuction response This method will
+     * run GET requests in a 5 second interval until the result is available
+     *
+     * <span class="doctag">@param</span> result The <span class="caps">JSON</span> object return from the POST request
+     * <span class="doctag">@param</span> checkInterval How often to check for new results (in seconds)
+     * <span class="doctag">@return</span> The result <span class="caps">JSON</span> object
+     */</span>
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;JSONObject&gt; <span class="title">getResult</span><span class="params">(JSONObject result, <span class="keyword">int</span> checkInterval)</span> <span class="keyword">throws</span> IOException </span>{
+        JSONArray results = result.getJSONArray(<span class="string">"results"</span>);
+        List&lt;JSONObject&gt; response = <span class="keyword">new</span> LinkedList&lt;&gt;();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; results.length(); i++) {
+            JSONObject res = results.getJSONObject(i);
+            String url = res.getString(<span class="string">"resultLink"</span>);
+            JSONObject getResult = getSingleResult(url, checkInterval);
+            response.add(getResult);
+        }
+        <span class="keyword">return</span> response;
 }
-
-$.ajax(settings).done(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>{
-  <span class="built_in">console</span>.log(response);
-});
 </code></pre>
-<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
-<h3 id="node-js">Node.js</h3>
+<h4 id="node-js">Node.js</h4>
 <pre><code class="lang-javascript"><span class="keyword">var</span> request = <span class="built_in">require</span>(<span class="string">"request"</span>);
 
 <span class="keyword">var</span> options = { <span class="attr">method</span>: <span class="string">'<span class="caps">POST</span>'</span>,
   <span class="attr">url</span>: <span class="string">'http://divaservices.unifr.ch/api/v2/enhancement/grayification/1'</span>,
   <span class="attr">headers</span>: { <span class="string">'content-type'</span>: <span class="string">'application/json'</span> },
   <span class="attr">body</span>: 
-   { <span class="attr">parameters</span>: {},
-     <span class="attr">data</span>: [ { <span class="attr">inputImage</span>: <span class="string">'testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg'</span> } ] },
+   { 
+     <span class="attr">parameters</span>: {},
+     <span class="attr">data</span>: [ 
+       { 
+         <span class="attr">inputImage</span>: <span class="string">'testCollection/ubb-A-<span class="caps">II</span>-0004_0002r.jpeg'</span> 
+        } 
+      ] 
+    },
   <span class="attr">json</span>: <span class="literal">true</span> };
 
 request(options, <span class="function"><span class="keyword">function</span> (<span class="params">error, response, body</span>) </span>{
@@ -280,7 +337,71 @@ request(options, <span class="function"><span class="keyword">function</span> (<
 });
 
 </code></pre>
-<p>A simliar polling strategy can be applied as in&nbsp;Python.</p>
+<p>And polling can be performed as&nbsp;follows:</p>
+<pre><code class="lang-javascript"><span class="comment">/**
+  * 
+  * Fetch the result from a given url
+  * Polls for the result every 1000ms (1s)
+  *  
+  * */</span>
+<span class="function"><span class="keyword">function</span> <span class="title">getResult</span>(<span class="params">url</span>) </span>{
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>) =&gt;</span> {
+        fetch(url, {
+            <span class="attr">method</span>: <span class="string">"<span class="caps">GET</span>"</span>
+        }).then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>{
+            <span class="keyword">return</span> res.json();
+        }).then(<span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>{
+            <span class="keyword">if</span> (data.status === <span class="string">"done"</span>) {
+                resolve(data);
+            }<span class="keyword">else</span> <span class="keyword">if</span>(data.status === <span class="string">"error"</span>){
+                <span class="keyword">return</span> reject(data);
+            } <span class="keyword">else</span> {
+                setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+                    resolve(getResult(url));
+                }, <span class="number">1000</span>);
+            }
+        });
+    });
+}
+</code></pre>
+<p>Where <code>url</code> in this case would be <code>response.outputs[0].resultLink</code>.</p>
+<h3 id="working-with-the-result">Working with the&nbsp;result</h3>
+<p>The <span class="caps">JSON</span> that is returned by the method looks as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"output"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"grayImage"</span>,
+        <span class="attr">"type"</span>: <span class="string">"image"</span>,
+        <span class="attr">"description"</span>: <span class="string">"Generated Grayscale Image"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"colorspace"</span>: <span class="string">"grayscale"</span>,
+          <span class="attr">"visualization"</span>: <span class="literal">true</span>
+        },
+        <span class="attr">"mime-type"</span>: <span class="string">"image/jpeg"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/grayImage.jpeg"</span>
+      }
+    },
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"mime-type"</span>: <span class="string">"text/plain"</span>,
+        <span class="attr">"type"</span>: <span class="string">"log"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/logFile.txt"</span>,
+        <span class="attr">"name"</span>: <span class="string">"logFile.txt"</span>,
+        <span class="attr">"options"</span>: {
+          <span class="attr">"visualization"</span>: <span class="literal">false</span>
+        }
+      }
+    }
+  ],
+  <span class="attr">"status"</span>: <span class="string">"done"</span>,
+  <span class="attr">"resultLink"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/data_0.json"</span>,
+  <span class="attr">"collectionName"</span>: <span class="string">"genuinetubbycero"</span>
+}
+</code></pre>
+<p>This <span class="caps">JSON</span> contains the resulting image in the first <code>file</code> object and log information in the second <code>file</code> object.</p>
+<p>The output image can access using <code>response[&#39;output&#39;][0][&#39;file&#39;][&#39;url&#39;]</code>.</p>
+<p><img src="http://divaservices.unifr.ch/api/v2/results/genuinetubbycero/data_0/grayImage.jpeg" alt=""></p>
 </section>
       </div>
     </div>
