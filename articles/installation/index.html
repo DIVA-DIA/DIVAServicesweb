@@ -51,9 +51,12 @@
             <li><a href="/DIVAServicesweb/articles/first-execution">Execute your first method</a></li>
           </ul>
           <h2>Intermediate Tutorials</h2>
-          <h2>Advanced Tutorials</h2>
           <ul>
             <li><a href="/DIVAServicesweb/articles/provide-your-method">Provide your method</a></li>
+          </ul>
+          <h2>Advanced Tutorials</h2>
+          <ul>
+            <li><a href="/DIVAServicesweb/articles/installation">Install DIVAServices</a></li>
           </ul>
           <h2>Applications</h2>
           <ul>
@@ -63,7 +66,78 @@
             <li><a href="/DIVAServicesweb/articles/insomnia">Insomnia</a></li>
           </ul>
         </aside>
-        <section class="md-container"><p>#Coming&nbsp;Soon</p>
+        <section class="md-container"><h1 id="overview">Overview</h1>
+<p>In this Tutorial we will explain how to set up your own instance of DIVAServices. This Tutorial is split into three main&nbsp;parts:</p>
+<ul>
+<li><a href="#setting-up-a-docker-instance">Setting up a Docker&nbsp;instance</a></li>
+<li><a href="#setting-up-the-file-server">Setting up the File&nbsp;Server</a></li>
+<li><a href="#setting-up-divaservices">Setting up DIVAServices</a>)</li>
+</ul>
+<h2 id="setting-up-a-docker-instance">Setting up a Docker&nbsp;instance</h2>
+<p>DIVAServices requires a <a href="https://docker.io">Docker</a> instance running on a server. This can be the same server or a different one. We suggest to use a clean Ubuntu <span class="caps">LTS</span> operating system (currently&nbsp;16.04).</p>
+<p>For simplicity we refer here to the installation documentation for Docker&nbsp;itself:</p>
+<ul>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Install Docker on&nbsp;Ubuntu</a></li>
+</ul>
+<p>Additionally the Docker Remote <span class="caps">API</span> needs to be&nbsp;enabled:</p>
+<ul>
+<li><a href="https://docs.docker.com/install/linux/linux-postinstall/#configure-where-the-docker-daemon-listens-for-connections">Enable Docker Remote <span class="caps">API</span></a><ul>
+<li>Set it do listen to <code>0.0.0.0:2375</code> as shown in the&nbsp;Tutorial</li>
+</ul>
+</li>
+</ul>
+<p>We suggest to additionally perform the following&nbsp;steps:</p>
+<ul>
+<li><a href="https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user">Manage Docker as non-root&nbsp;user</a></li>
+<li><a href="https://docs.docker.com/install/linux/linux-postinstall/#configure-docker-to-start-on-boot">Configure Docker to start at&nbsp;boot</a></li>
+</ul>
+<h3 id="additional-tool">Additional&nbsp;Tool</h3>
+<p>Additionally the server running Docker needs to have the following tools&nbsp;installed</p>
+<ul>
+<li><a href="https://github.com/common-workflow-language/cwltool">cwltool</a> the executer for the Common Workflow Language<ul>
+<li>Installation instructions are provided on the Github&nbsp;Page</li>
+</ul>
+</li>
+<li><a href="http://ubuntuhandbook.org/index.php/2016/04/enable-ssh-ubuntu-16-04-lts/">OpenSSH</a> with login enabled for the account running docker<ul>
+<li><strong>Note</strong> DIVAServices currently uses <span class="caps">SSH</span> with simple username/password authentication. This is not high security and it is therefore recommended that the Docker server does not have direct exposure to the&nbsp;internet.</li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-the-file-server">Setting up the File&nbsp;Server</h2>
+<p>DIVAServices needs access to a location in which it can store its files. This can be on the same server where DIVAServices is installed, or on a separate&nbsp;server.</p>
+<p>In order to share data between the different instances we suggest setting up a <a href="https://help.ubuntu.com/community/SettingUpNFSHowTo">Network File System</a> to which all different involved machines have access&nbsp;to.</p>
+<h2 id="setting-up-divaservices">Setting up&nbsp;DIVAServices</h2>
+<p>DIVAServices can be set up in two different&nbsp;ways:</p>
+<ul>
+<li>as a Docker&nbsp;container</li>
+<li>running locally as a regular application using&nbsp;Node.<span class="caps">JS</span></li>
+</ul>
+<p>We suggest to run it as a Docker container as it is simpler to install and to&nbsp;maintain.</p>
+<h3 id="install-divaservices-using-docker-compose">Install DIVAServices using&nbsp;docker-compose</h3>
+<h4 id="downloading-the-divaservices-sources">Downloading the DIVAServices&nbsp;sources</h4>
+<p>The first step for the insallation is to clone the github&nbsp;repository:</p>
+<pre><code class="lang-bash">git <span class="built_in">clone</span> https://github.com/lunactic/DIVAServices.git
+</code></pre>
+<p><strong>Note</strong> If you want to run the latest updates check out the <code>development</code> branch (this can be&nbsp;unstable)</p>
+<h4 id="build-the-docker-image">Build the Docker&nbsp;image</h4>
+<p>The docker image can be built with <a href="https://docs.docker.com/compose/install/">docker-compose</a>.</p>
+<p>In the <code>docker-compose.yaml</code> file you need to change the mountpoints for the&nbsp;volumes:</p>
+<pre><code class="lang-YAML"><span class="attr">version:</span> <span class="string">'3.3'</span>
+<span class="attr">services:</span>
+<span class="attr">  dev_web:</span>
+<span class="attr">    env_file:</span>
+     <span class="string">.env_dev</span>
+<span class="attr">    build:</span> <span class="string">.</span>
+<span class="attr">    command:</span> <span class="string">yarn</span> <span class="string">run</span> <span class="string">start</span>
+<span class="attr">    ports:</span>
+<span class="bullet">     -</span> <span class="string">"8080:8080"</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">     -</span> <span class="string">.:/code</span>
+<span class="attr">     - PATH_TO_YOUR_DATA_LOCATION:</span><span class="string">/data</span>
+</code></pre>
+<p>And then you can build the Docker Image&nbsp;using</p>
+<pre><code class="lang-bash">docker-compose -f docker-compose.yaml build
+</code></pre>
 </section>
       </div>
     </div>
