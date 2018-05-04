@@ -175,7 +175,7 @@ response = requests.request("POST", url, data=payload, headers=headers)
 ```
 And to poll for the result the following method can be used:
 
-``` Python
+``` python
 def pollResult(self, result_link):
     """ Polls for the result of the execution in 1s intervals 
     Arguments:
@@ -198,7 +198,7 @@ def pollResult(self, result_link):
 Where `result_link` in this case would be `response['outputs'][0]['resultLink']`.
 
 ### Java
-```Java
+```java
 HttpResponse<JSONObject> response = Unirest.post("http://divaservices.unifr.ch/api/v2/enhancement/grayification/1")
   .header("content-type", "application/json")
   .body(" {\"parameters\":{},\"data\":[{\"inputImage\": \"testCollection/ubb-A-II-0004_0002r.jpeg\"}]}")
@@ -208,7 +208,7 @@ A simliar polling strategy can be applied as in Python.
 
 
 ### JavaScript (with JQuery)
-``` JavaScript
+``` javascript
 var settings = {
   "async": true,
   "crossDomain": true,
@@ -229,7 +229,7 @@ A simliar polling strategy can be applied as in Python.
 
 ### Node.js
 
-``` JavaScript
+``` javascript
 var request = require("request");
 
 var options = { method: 'POST',

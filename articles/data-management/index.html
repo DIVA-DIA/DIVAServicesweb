@@ -8,10 +8,14 @@
     </title>
     <link rel="stylesheet" href="/DIVAServicesweb/styles/main.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/themes/prism-twilight.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   </head>
   <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.js"></script>
+    <sciprt src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></sciprt>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-python.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-java.js"></script>
     <div class="container nav">
       <div class="larger">
         <nav>
@@ -56,7 +60,62 @@
             <li><a href="/DIVAServicesweb/articles/spotlight">DIVAServices-Spotlight</a></li>
           </ul>
         </aside>
-        <section class="md-container"><h1 id="coming-soon-">Coming&nbsp;Soon!</h1>
+        <section class="md-container"><h1 id="handling-data-on-divaservices">Handling Data on&nbsp;DIVAServices</h1>
+<p>All data that is stored on DIVAServices is open, and can be accessed by anyone.
+We currently don’t have plans to build in additional security features in order to hide&nbsp;data.</p>
+<p><strong>Important:</strong> This means, as defined in the <a href="https://github.com/lunactic/DIVAServices/blob/master/TOS.md">Terms of Services</a> data provided to DIVAServices has to be licensed under a <a href="https://creativecommons.org/">Creative Commons</a> (at least&nbsp;<span class="caps">CC</span>-BY-SA)</p>
+<p><strong>Important:</strong> As DIVAServices is <strong><span class="caps">NOT</span></strong> a data store, we do not guarantee that data provided to DIVAServices is stored long-term and data can be deleted without&nbsp;notice.</p>
+<h2 id="data-organization">Data&nbsp;Organization</h2>
+<p>Data on DIVAServices is organized in <code>collections</code>. Each collection serves a bucket for a number of individual files that belong&nbsp;together.</p>
+<h2 id="accessing-existing-data">Accessing existing&nbsp;Data</h2>
+<p>As described in the <a href="/DIVAServicesweb/articles/api"><span class="caps">API</span></a> Tutorial, all collection information is available through the <code>/collections</code> <span class="caps">API</span>.</p>
+<p>A <span class="caps">GET</span> request to <a href="http://divaservices.unifr.ch/api/v2/collections"><code>/collections</code></a> provides information on all currently available collections. The response looks as&nbsp;follows:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"collections"</span>: [
+    {
+      <span class="attr">"collection"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"irritatingflickeringpitbull"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/collections/irritatingflickeringpitbull"</span>
+      }
+    },
+    {
+      <span class="attr">"collection"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"dopeyscholarlykentrosaurus"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/collections/dopeyscholarlykentrosaurus"</span>
+      }
+    },
+    {
+      <span class="attr">"collection"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"brownwigglyasianconstablebutterfly"</span>,
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/collections/brownwigglyasianconstablebutterfly"</span>
+      }
+    }
+  ]
+}
+</code></pre>
+<p>The <code>collections</code> array contains the list of existing&nbsp;collections.</p>
+<p>A <span class="caps">GET</span> request to the <code>url</code> of a collection, provides additional information about the collection, as well as the files that are&nbsp;available:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"statusCode"</span>: <span class="number">200</span>,
+  <span class="attr">"statusMessage"</span>: <span class="string">"Collection is available"</span>,
+  <span class="attr">"percentage"</span>: <span class="number">100</span>,
+  <span class="attr">"totalFiles"</span>: <span class="number">1</span>,
+  <span class="attr">"files"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"url"</span>: <span class="string">"http://divaservices.unifr.ch/api/v2/files/irritatingflickeringpitbull/original/inverseImage.jpg"</span>,
+        <span class="attr">"identifier"</span>: <span class="string">"irritatingflickeringpitbull/inverseImage.jpg"</span>
+      }
+    }
+  ]
+}
+</code></pre>
+<p>We plan on providing additional information about collections in the future (e.g. tags to specify the contents of a&nbsp;collection)</p>
+<h2 id="divaservices-file-identifiers">DIVAServices file&nbsp;identifiers</h2>
+<p>Each file on DIVAServices has an <code>identifier</code> this <code>identifier</code> is used to refer to data elements when executing&nbsp;methods.</p>
+<h2 id="uploading-data">Uploading&nbsp;Data</h2>
+<h3 id="uploading-a-single-file">Uploading a single&nbsp;file</h3>
+<h3 id="uploading-multiple-files">Uploading multiple&nbsp;files</h3>
 </section>
       </div>
     </div>
@@ -69,6 +128,5 @@
         </footer>
       </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.min.js"></script>
   </body>
 </html>
