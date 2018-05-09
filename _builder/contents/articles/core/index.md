@@ -20,6 +20,9 @@ The RESTful principle is explained in the visualization below. In DIVAServices G
 ![RESTful Principle](/DIVAServicesweb/articles/core/rest.png)
 ([Source](https://crunchify.com/how-to-create-restful-java-client-with-jersey-client-example/))
 
+**Experiment it live**
+- An IPython Notebook to test this is available on [Google Colab](https://drive.google.com/file/d/1b3tgEzZJMP4SPNtMZt9mAhgjFw0PFS0R/view?usp=sharing)
+
 As an example `GET http://divaservices.unifr.ch/api/v2` will list all available methods in JSON as below:
 ``` JSON
 [

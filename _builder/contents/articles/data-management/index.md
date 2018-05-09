@@ -7,6 +7,9 @@ template: article.jade
 All data that is stored on DIVAServices is open, and can be accessed by anyone.
 We currently don't have plans to build in additional security features in order to hide data.
 
+**Experiment it live**
+- There is a IPython Notebook available on [Google Colab]()
+
 **Important:** This means, as defined in the [Terms of Services](https://github.com/lunactic/DIVAServices/blob/master/TOS.md) data provided to DIVAServices has to be licensed under a [Creative Commons](https://creativecommons.org/) (at least CC-BY-SA)
 
 **Important:** As DIVAServices is **NOT** a data store, we do not guarantee that data provided to DIVAServices is stored long-term and data can be deleted without notice.
@@ -108,12 +111,58 @@ The simples way for transferring files to DIVAServices if they are accessible th
 
 This will create a collection named `YourCollectionName`.
 
+In case a collection with the same name exists already, an error is returned with the following message:
+``` JSON
+{
+  "errorType" : "DuplicateCollectionError",
+  "message" : "A collection with the name: YourCollectionName already exists."
+}
+```
 
 ### File content inside the request
+Files can be provided mainly in two different ways:
 
+#### Providing as URL
+The simples way of providing files was shown in the example above. Whenever possible files should be referenced from publicly accessible URLs. DIVAServices will then download the files from there and store them on the File Storage.
+
+When referencing from a URL the JSON object for a file needs to fullfill the following requirements:
+ - `type` needs to be set to `url`
+ - `value` needs to point to the publicly accessible URL where the file can be downloaded
+
+#### Providing as base64 encoded string
+In case files can not be provided as URLs, files can be provided using base64 encoding. Base64 encoding can be achieved in many programming languages, and in the Google Colab an example is provided in Python.
+
+When using base64 encoding, the JSON object for a file needs to fullfill the following requirements:
+- `type` needs to be set to `base64`
+- `value` needs to be the base64 encoded string of the file.
 
 ### Uploading multiple files
+Furthermore it is possible to upload more than one file at the time. For this one simply puts more than one JSON object into the `files` array:
+
+```JSON
+{
+  "name":"testCollection",
+  "files":[
+    {
+      "type":"url",
+      "value":"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-II-0004/ubb-A-II-0004_0002r.jp2/full/pct:25/0/default.jpg",
+      "name":"ubb-A-II-0004_0002r"
+    },
+    {
+      "type":"url",
+      "value":"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-II-0004/ubb-A-II-0004_0004r.jp2/full/pct:25/0/default.jpg",
+      "name":"ubb-A-II-0004_0004r"
+    }
+  ]
+}
+```
+
+**Note**: If you want to create a collection with multiple files from base64 encoded images, be aware that the size of the request can not exceed 200MB. If you want to add more files than this, create the collection with a single file first and then add more files to the existing collection as explained below.
 
 ## Adding files to a collection
+Files can be added to a collection using a PUT request to `/collections/:collectionName`.
+The structure of the `request-body` is the same as above and files can be added either as `url` or `base64` encoded.
 
 
+## Remove a collection
+A collection can be deleted with a DELETE request to `/collections/:collectionName`.
