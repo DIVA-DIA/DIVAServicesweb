@@ -69,6 +69,10 @@
         <section class="md-container"><h1 id="handling-data-on-divaservices">Handling Data on&nbsp;DIVAServices</h1>
 <p>All data that is stored on DIVAServices is open, and can be accessed by anyone.
 We currently don’t have plans to build in additional security features in order to hide&nbsp;data.</p>
+<p><strong>Experiment it&nbsp;live</strong></p>
+<ul>
+<li>There is a IPython Notebook available on <a href="/articles/data-management/">Google&nbsp;Colab</a></li>
+</ul>
 <p><strong>Important:</strong> This means, as defined in the <a href="https://github.com/lunactic/DIVAServices/blob/master/TOS.md">Terms of Services</a> data provided to DIVAServices has to be licensed under a <a href="https://creativecommons.org/">Creative Commons</a> (at least&nbsp;<span class="caps">CC</span>-BY-SA)</p>
 <p><strong>Important:</strong> As DIVAServices is <strong><span class="caps">NOT</span></strong> a data store, we do not guarantee that data provided to DIVAServices is stored long-term and data can be deleted without&nbsp;notice.</p>
 <h2 id="data-organization">Data&nbsp;Organization</h2>
@@ -149,9 +153,52 @@ Collections of files can be created in different ways as described&nbsp;below.</
 }
 </code></pre>
 <p>This will create a collection named <code>YourCollectionName</code>.</p>
+<p>In case a collection with the same name exists already, an error is returned with the following&nbsp;message:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"errorType"</span> : <span class="string">"DuplicateCollectionError"</span>,
+  <span class="attr">"message"</span> : <span class="string">"A collection with the name: YourCollectionName already exists."</span>
+}
+</code></pre>
 <h3 id="file-content-inside-the-request">File content inside the&nbsp;request</h3>
+<p>Files can be provided mainly in two different&nbsp;ways:</p>
+<h4 id="providing-as-url">Providing as&nbsp;<span class="caps">URL</span></h4>
+<p>The simples way of providing files was shown in the example above. Whenever possible files should be referenced from publicly accessible URLs. DIVAServices will then download the files from there and store them on the File&nbsp;Storage.</p>
+<p>When referencing from a <span class="caps">URL</span> the JSON object for a file needs to fullfill the following&nbsp;requirements:</p>
+<ul>
+<li><code>type</code> needs to be set to <code>url</code></li>
+<li><code>value</code> needs to point to the publicly accessible <span class="caps">URL</span> where the file can be&nbsp;downloaded</li>
+</ul>
+<h4 id="providing-as-base64-encoded-string">Providing as base64 encoded&nbsp;string</h4>
+<p>In case files can not be provided as URLs, files can be provided using base64 encoding. Base64 encoding can be achieved in many programming languages, and in the Google Colab an example is provided in&nbsp;Python.</p>
+<p>When using base64 encoding, the <span class="caps">JSON</span> object for a file needs to fullfill the following&nbsp;requirements:</p>
+<ul>
+<li><code>type</code> needs to be set to <code>base64</code></li>
+<li><code>value</code> needs to be the base64 encoded string of the&nbsp;file.</li>
+</ul>
 <h3 id="uploading-multiple-files">Uploading multiple&nbsp;files</h3>
+<p>Furthermore it is possible to upload more than one file at the time. For this one simply puts more than one <span class="caps">JSON</span> object into the <code>files</code> array:</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"name"</span>:<span class="string">"testCollection"</span>,
+  <span class="attr">"files"</span>:[
+    {
+      <span class="attr">"type"</span>:<span class="string">"url"</span>,
+      <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-<span class="caps">II</span>-0004/ubb-A-II-0004_0002r.jp2/full/pct:25/0/default.jpg"</span>,
+      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0002r"</span>
+    },
+    {
+      <span class="attr">"type"</span>:<span class="string">"url"</span>,
+      <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-<span class="caps">II</span>-0004/ubb-A-II-0004_0004r.jp2/full/pct:25/0/default.jpg"</span>,
+      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0004r"</span>
+    }
+  ]
+}
+</code></pre>
+<p><strong>Note</strong>: If you want to create a collection with multiple files from base64 encoded images, be aware that the size of the request can not exceed <span class="caps">200MB</span>. If you want to add more files than this, create the collection with a single file first and then add more files to the existing collection as explained&nbsp;below.</p>
 <h2 id="adding-files-to-a-collection">Adding files to a&nbsp;collection</h2>
+<p>Files can be added to a collection using a <span class="caps">PUT</span> request to <code>/collections/:collectionName</code>.
+The structure of the <code>request-body</code> is the same as above and files can be added either as <code>url</code> or <code>base64</code> encoded.</p>
+<h2 id="remove-a-collection">Remove a&nbsp;collection</h2>
+<p>A collection can be deleted with a <span class="caps">DELETE</span> request to <code>/collections/:collectionName</code>.</p>
 </section>
       </div>
     </div>
