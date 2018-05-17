@@ -21,6 +21,9 @@ template: article.jade
     - [GET /collections/:collectionname](#get--collections--collectionname)
     - [PUT /collections/:collectionname](#put--collections--collectionname)
 
+**Experiment it live**
+- There is an IPython Notebook available on [Google Colab](https://drive.google.com/file/d/1xlii0YX4iOscJ0pRoqk6fXJFTNWWYnXK/view?usp=sharing)
+
 ## Root Endpoint
 ### GET /
 The root (http://divaservices.unifr.ch/api/v2/) provides information about all available methods. The response will look as follows:

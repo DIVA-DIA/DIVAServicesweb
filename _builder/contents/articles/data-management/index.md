@@ -159,6 +159,21 @@ Furthermore it is possible to upload more than one file at the time. For this on
 
 **Note**: If you want to create a collection with multiple files from base64 encoded images, be aware that the size of the request can not exceed 200MB. If you want to add more files than this, create the collection with a single file first and then add more files to the existing collection as explained below.
 
+### Error Messages
+
+Creating a collection can produce the following error messages:
+
+#### Collection Already Exists
+If a collection with a given name already exists you will get the following response:
+``` json
+{
+  "message": "A collection with the name: collection_name already exists.",
+  "errorType": "DuplicateCollectionError"
+}
+```
+The HTTP `status-code` of this response is `500`.
+
+
 ## Adding files to a collection
 Files can be added to a collection using a PUT request to `/collections/:collectionName`.
 The structure of the `request-body` is the same as above and files can be added either as `url` or `base64` encoded.
