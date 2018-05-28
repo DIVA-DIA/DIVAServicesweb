@@ -8,7 +8,7 @@ All data that is stored on DIVAServices is open, and can be accessed by anyone.
 We currently don't have plans to build in additional security features in order to hide data.
 
 **Experiment it live**
-- There is a IPython Notebook available on [Google Colab]()
+- There is a IPython Notebook available on [Google Colab](https://drive.google.com/file/d/1IsY6cOoMbmTDANlilC5Gj550GifsVO6_/view?usp=sharing)
 
 **Important:** This means, as defined in the [Terms of Services](https://github.com/lunactic/DIVAServices/blob/master/TOS.md) data provided to DIVAServices has to be licensed under a [Creative Commons](https://creativecommons.org/) (at least CC-BY-SA)
 
@@ -103,7 +103,7 @@ The simples way for transferring files to DIVAServices if they are accessible th
     {
       "type":"url",
       "value":"http://www.e-codices.unifr.ch/loris/bnf/bnf-lat11641/bnf-lat11641_001r.jp2/full/pct:25/0/default.jpg",
-      "name":"bnf-lat11641_001r"
+      "name":"bnf-lat11641_001r.jpg"
     }
   ]
 }
@@ -128,6 +128,7 @@ The simples way of providing files was shown in the example above. Whenever poss
 When referencing from a URL the JSON object for a file needs to fullfill the following requirements:
  - `type` needs to be set to `url`
  - `value` needs to point to the publicly accessible URL where the file can be downloaded
+ - `name` (optional) the filename that should be given this file. Full filename including file extension needs to be provided (e.g. `image_001.jpg`).
 
 #### Providing as base64 encoded string
 In case files can not be provided as URLs, files can be provided using base64 encoding. Base64 encoding can be achieved in many programming languages, and in the Google Colab an example is provided in Python.
@@ -135,6 +136,7 @@ In case files can not be provided as URLs, files can be provided using base64 en
 When using base64 encoding, the JSON object for a file needs to fullfill the following requirements:
 - `type` needs to be set to `base64`
 - `value` needs to be the base64 encoded string of the file.
+- `name` the filename that should be given this file. Needs to include the file extension. (e.g. `image_001.jpeg`)
 
 ### Uploading multiple files
 Furthermore it is possible to upload more than one file at the time. For this one simply puts more than one JSON object into the `files` array:
@@ -146,12 +148,12 @@ Furthermore it is possible to upload more than one file at the time. For this on
     {
       "type":"url",
       "value":"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-II-0004/ubb-A-II-0004_0002r.jp2/full/pct:25/0/default.jpg",
-      "name":"ubb-A-II-0004_0002r"
+      "name":"ubb-A-II-0004_0002r.jpg"
     },
     {
       "type":"url",
       "value":"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-II-0004/ubb-A-II-0004_0004r.jp2/full/pct:25/0/default.jpg",
-      "name":"ubb-A-II-0004_0004r"
+      "name":"ubb-A-II-0004_0004r.jpg"
     }
   ]
 }

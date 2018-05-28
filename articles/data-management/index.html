@@ -71,7 +71,7 @@
 We currently don’t have plans to build in additional security features in order to hide&nbsp;data.</p>
 <p><strong>Experiment it&nbsp;live</strong></p>
 <ul>
-<li>There is a IPython Notebook available on <a href="/articles/data-management/">Google&nbsp;Colab</a></li>
+<li>There is a IPython Notebook available on <a href="https://drive.google.com/file/d/1IsY6cOoMbmTDANlilC5Gj550GifsVO6_/view?usp=sharing">Google&nbsp;Colab</a></li>
 </ul>
 <p><strong>Important:</strong> This means, as defined in the <a href="https://github.com/lunactic/DIVAServices/blob/master/TOS.md">Terms of Services</a> data provided to DIVAServices has to be licensed under a <a href="https://creativecommons.org/">Creative Commons</a> (at least&nbsp;<span class="caps">CC</span>-BY-SA)</p>
 <p><strong>Important:</strong> As DIVAServices is <strong><span class="caps">NOT</span></strong> a data store, we do not guarantee that data provided to DIVAServices is stored long-term and data can be deleted without&nbsp;notice.</p>
@@ -147,7 +147,7 @@ Collections of files can be created in different ways as described&nbsp;below.</
     {
       <span class="attr">"type"</span>:<span class="string">"url"</span>,
       <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/bnf/bnf-lat11641/bnf-lat11641_001r.jp2/full/pct:25/0/default.jpg"</span>,
-      <span class="attr">"name"</span>:<span class="string">"bnf-lat11641_001r"</span>
+      <span class="attr">"name"</span>:<span class="string">"bnf-lat11641_001r.jpg"</span>
     }
   ]
 }
@@ -167,6 +167,7 @@ Collections of files can be created in different ways as described&nbsp;below.</
 <ul>
 <li><code>type</code> needs to be set to <code>url</code></li>
 <li><code>value</code> needs to point to the publicly accessible <span class="caps">URL</span> where the file can be&nbsp;downloaded</li>
+<li><code>name</code> (optional) the filename that should be given this file. Full filename including file extension needs to be provided (e.g. <code>image_001.jpg</code>).</li>
 </ul>
 <h4 id="providing-as-base64-encoded-string">Providing as base64 encoded&nbsp;string</h4>
 <p>In case files can not be provided as URLs, files can be provided using base64 encoding. Base64 encoding can be achieved in many programming languages, and in the Google Colab an example is provided in&nbsp;Python.</p>
@@ -174,6 +175,7 @@ Collections of files can be created in different ways as described&nbsp;below.</
 <ul>
 <li><code>type</code> needs to be set to <code>base64</code></li>
 <li><code>value</code> needs to be the base64 encoded string of the&nbsp;file.</li>
+<li><code>name</code> the filename that should be given this file. Needs to include the file extension. (e.g. <code>image_001.jpeg</code>)</li>
 </ul>
 <h3 id="uploading-multiple-files">Uploading multiple&nbsp;files</h3>
 <p>Furthermore it is possible to upload more than one file at the time. For this one simply puts more than one <span class="caps">JSON</span> object into the <code>files</code> array:</p>
@@ -183,17 +185,27 @@ Collections of files can be created in different ways as described&nbsp;below.</
     {
       <span class="attr">"type"</span>:<span class="string">"url"</span>,
       <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-<span class="caps">II</span>-0004/ubb-A-II-0004_0002r.jp2/full/pct:25/0/default.jpg"</span>,
-      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0002r"</span>
+      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0002r.jpg"</span>
     },
     {
       <span class="attr">"type"</span>:<span class="string">"url"</span>,
       <span class="attr">"value"</span>:<span class="string">"http://www.e-codices.unifr.ch/loris/ubb/ubb-A-<span class="caps">II</span>-0004/ubb-A-II-0004_0004r.jp2/full/pct:25/0/default.jpg"</span>,
-      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0004r"</span>
+      <span class="attr">"name"</span>:<span class="string">"ubb-A-<span class="caps">II</span>-0004_0004r.jpg"</span>
     }
   ]
 }
 </code></pre>
 <p><strong>Note</strong>: If you want to create a collection with multiple files from base64 encoded images, be aware that the size of the request can not exceed <span class="caps">200MB</span>. If you want to add more files than this, create the collection with a single file first and then add more files to the existing collection as explained&nbsp;below.</p>
+<h3 id="error-messages">Error&nbsp;Messages</h3>
+<p>Creating a collection can produce the following error&nbsp;messages:</p>
+<h4 id="collection-already-exists">Collection Already&nbsp;Exists</h4>
+<p>If a collection with a given name already exists you will get the following&nbsp;response:</p>
+<pre><code class="lang-json">{
+  <span class="attr">"message"</span>: <span class="string">"A collection with the name: collection_name already exists."</span>,
+  <span class="attr">"errorType"</span>: <span class="string">"DuplicateCollectionError"</span>
+}
+</code></pre>
+<p>The <span class="caps">HTTP</span> <code>status-code</code> of this response is <code>500</code>.</p>
 <h2 id="adding-files-to-a-collection">Adding files to a&nbsp;collection</h2>
 <p>Files can be added to a collection using a <span class="caps">PUT</span> request to <code>/collections/:collectionName</code>.
 The structure of the <code>request-body</code> is the same as above and files can be added either as <code>url</code> or <code>base64</code> encoded.</p>
