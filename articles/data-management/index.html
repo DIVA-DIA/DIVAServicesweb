@@ -194,6 +194,16 @@ Collections of files can be created in different ways as described&nbsp;below.</
 }
 </code></pre>
 <p><strong>Note</strong>: If you want to create a collection with multiple files from base64 encoded images, be aware that the size of the request can not exceed <span class="caps">200MB</span>. If you want to add more files than this, create the collection with a single file first and then add more files to the existing collection as explained&nbsp;below.</p>
+<h3 id="error-messages">Error&nbsp;Messages</h3>
+<p>Creating a collection can produce the following error&nbsp;messages:</p>
+<h4 id="collection-already-exists">Collection Already&nbsp;Exists</h4>
+<p>If a collection with a given name already exists you will get the following&nbsp;response:</p>
+<pre><code class="lang-json">{
+  <span class="attr">"message"</span>: <span class="string">"A collection with the name: collection_name already exists."</span>,
+  <span class="attr">"errorType"</span>: <span class="string">"DuplicateCollectionError"</span>
+}
+</code></pre>
+<p>The <span class="caps">HTTP</span> <code>status-code</code> of this response is <code>500</code>.</p>
 <h2 id="adding-files-to-a-collection">Adding files to a&nbsp;collection</h2>
 <p>Files can be added to a collection using a <span class="caps">PUT</span> request to <code>/collections/:collectionName</code>.
 The structure of the <code>request-body</code> is the same as above and files can be added either as <code>url</code> or <code>base64</code> encoded.</p>
