@@ -12,10 +12,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
   </head>
   <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/prism.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-json.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-python.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.14.0/components/prism-java.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-python.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-java.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-docker.js"></script>
     <div class="container nav">
       <div class="larger">
         <nav>
@@ -66,7 +68,213 @@
             <li><a href="/DIVAServicesweb/articles/insomnia">Insomnia</a></li>
           </ul>
         </aside>
-        <section class="md-container"><h1 id="coming-soon-">Coming&nbsp;Soon!</h1>
+        <section class="md-container"><h1 id="introduction">Introduction</h1>
+<p> Time: 60&nbsp;min</p>
+<p>For this Tutorial, the aim is to create a Docker Image that is able to perform Otsu Binarization and then use this image on DIVAServices.
+To simplify the process, we provide the jar-file for this method and we will also guide the process step by step.
+The jar-file can be downloaded <a href="/DIVAServicesweb/articles/provide-your-method/sources/otsubinarization.jar">here</a> and a test image to use <a href="/DIVAServicesweb/articles/provide-your-method/sources/example.png">here</a></p>
+<p>The solutions are available in a zip-file do download <a href="/DIVAServicesweb/articles/provide-your-method/solution/solution.zip">here</a></p>
+<p>The Process will involve the following&nbsp;steps:</p>
+<ul>
+<li>Test the method&nbsp;locally</li>
+<li>Create a shell script that runs the&nbsp;method</li>
+<li>Create the Docker Image for the&nbsp;method</li>
+<li>Test the Docker&nbsp;Image</li>
+<li>Upload the Docker Image to Docker&nbsp;Hub</li>
+<li>Create the <span class="caps">POST</span> request to install the method on&nbsp;DIVAServices</li>
+<li>Test the method on&nbsp;DIVAServices</li>
+</ul>
+<p>The steps performed in this Tutorial are applicable to other methods as&nbsp;well.</p>
+<h1 id="pre-requisites">Pre-Requisites</h1>
+<p>In order to run this tutorial you need to have an installation of the following&nbsp;tools:</p>
+<ul>
+<li>docker (see: <a href="https://docs.docker.com/install/">Docker Installation</a>, for this purposes the Docker Community Edition is&nbsp;enough)</li>
+<li>python</li>
+<li>Java (&gt;= java&nbsp;8)</li>
+<li>An account on <a href="http://hub.docker.com">Docker Hub</a>, remember your username as we will need it later for tagging your Docker&nbsp;Image.</li>
+</ul>
+<h1 id="procedure">Procedure</h1>
+<h2 id="1-run-the-method-locally">1. Run the method&nbsp;locally</h2>
+<p>In a first step we want to ensure, that the application we want to deploy is actually working locally.
+The application takes two&nbsp;parameters:</p>
+<ul>
+<li>path to input&nbsp;image</li>
+<li>path to output&nbsp;folder</li>
+</ul>
+<p>This means we can execute the application like this (run in the directory where you downloaded the jar-file in a&nbsp;terminal):</p>
+<pre><code>java -jar otsubinarization.jar example.png ./
+</code></pre><p>This will create a file name <code>otsuBinaryImage.png</code> in the same&nbsp;folder.</p>
+<h2 id="2-create-a-shell-script-that-runs-the-method">2. Create a shell script that runs the&nbsp;method</h2>
+<p>As a next step we want to create a shell script that takes the necessary parameters as inputs and executes the method. We will use this shell script again within the Docker&nbsp;image.</p>
+<p>Create a file named <code>script.sh</code> in the same folder as the jar file with the following&nbsp;contents:</p>
+<pre><code class="lang-bash"><span class="meta">#!/bin/sh</span>
+inputImage=<span class="variable">${1}</span>
+outputFolder=<span class="variable">${2}</span>
+
+java -jar otsubinarization.jar <span class="variable">${inputImage}</span> <span class="variable">${outputFolder}</span>
+</code></pre>
+<p>and make it executable&nbsp;using</p>
+<pre><code class="lang-bash">chmod +x script.sh
+</code></pre>
+<p>Now we can test the script with (run in the same folder as the jar&nbsp;file)</p>
+<pre><code class="lang-bash">./script.sh example.png ./
+</code></pre>
+<p>Which should generate the same <code>otsuBinaryImage.png</code> as&nbsp;before.</p>
+<p>To use this script inside the Docker Image we will have to use full paths to reference all files, so we change the content of this file&nbsp;to:</p>
+<pre><code class="lang-bash"><span class="meta">#!/bin/sh</span>
+inputImage=<span class="variable">${1}</span>
+outputFolder=<span class="variable">${2}</span>
+
+java -jar /input/otsubinarization.jar <span class="variable">${inputImage}</span> <span class="variable">${outputFolder}</span>
+</code></pre>
+<p>And remember we will have to put the jar file to <code>/input/otsubinarization.jar</code></p>
+<h2 id="3-create-the-docker-image-for-the-method">3. Create the Docker Image for the&nbsp;method</h2>
+<p>For this Tutorial we will build the Image using a practice similar to Makefiles. For this, create a file with the name <code>Dockerfile</code> (no file extension) in the <code>sources</code> directory and add the following&nbsp;contents:</p>
+<pre><code class="lang-docker"><span class="keyword"><span class="caps">FROM</span></span> openjdk:<span class="number">8</span>
+<span class="keyword"><span class="caps">LABEL</span></span><span class="bash"> maintainer=<span class="string">"your.name@email.com"</span>
+</span><span class="keyword"><span class="caps">COPY</span></span><span class="bash"> otsubinarization.jar /input/otsubinarization.jar
+</span><span class="keyword"><span class="caps">COPY</span></span><span class="bash"> script.sh /input/script.sh</span>
+</code></pre>
+<p>This will do the following:
+<code>FROM openjdk:8</code> Is an instruction to use a base installation of openJDK 8. Meaning all our changes will be built on top of a clean environment that has openjdk&nbsp;available.</p>
+<p>There are images available for almost any environments one might want to use and they can be search on the <a href="https://store.docker.com">Docker&nbsp;Store</a></p>
+<p><code>LABEL maintainer=&quot;your.name@email.com&quot;</code> Provides information about who maintains this Docker Image. This should be your email&nbsp;address.</p>
+<p><code>COPY &lt;src&gt; &lt;dest&gt;</code> Copies a local file into the Docker Image. This will make the files permanently available inside the&nbsp;image.</p>
+<p>The complete reference on Dockerfiles is available <a href="https://docs.docker.com/engine/reference/builder/">here</a>.</p>
+<p>We can now build the Docker Image using the&nbsp;command:</p>
+<pre><code class="lang-bash">docker build -t docker_hub_account_name/test_otsubinarization -f Dockerfile .
+</code></pre>
+<p>This will instruct Docker to read the Docker file and execute all the commands.
+With <code>-t</code> we can provide a name for the Docker Image that is created and that can be used as reference later&nbsp;on.</p>
+<p>If this process runs fine you should fine a line like this at the bottom of your&nbsp;console:</p>
+<pre><code class="lang-bash">Successfully tagged docker_hub_account_name/test_2018_otsubinarization:latest
+</code></pre>
+<h2 id="4-test-the-docker-image">4. Test the Docker&nbsp;Image</h2>
+<p>We can now test if the Docker Image is running as expected. For this we can execute the newly created image like&nbsp;this:</p>
+<pre><code class="lang-bash">docker run -it --rm -v /FULL_PATH_TO/example.png:/input/example.png -v /FULL_PATH_TO_OUTPUT_FOLDER/:/output/ docker_hub_account_name/test_otsubinarization sh /input/script.sh /input/example.png /output/
+</code></pre>
+<p>This command is built from the&nbsp;following:</p>
+<ul>
+<li><code>docker run</code> Executes a command in a new&nbsp;container</li>
+<li><code>-it</code> runs the container in interactive mode and allocates a pseudo <span class="caps">TTY</span> (not&nbsp;important)</li>
+<li><code>--rm</code> removes the container from the system after the&nbsp;execution</li>
+<li><code>-v &lt;src&gt; &lt;dst&gt;</code> mounts a local file/folder from \&lt;src> (needs to be full path) into the container at \&lt;dst>. If \&lt;dst> does not exist it will be created&nbsp;automatically.</li>
+<li><code>docker_hub_account_name/test_otsubinarization</code> reference to the image that should be used for running the&nbsp;command</li>
+<li><code>sh /input/script.sh /input/example.png /output/</code> The command that will be&nbsp;executed </li>
+</ul>
+<p>If this result operates fine, you should find the <code>otsuBinaryImage.png</code> in the <code>&lt;src&gt;</code> folder provided to the <code>/output/</code> directory/.</p>
+<h2 id="5-upload-image-to-docker-hub">5. Upload image to Docker&nbsp;Hub</h2>
+<p>The Docker Image can now be uloaded and made available to others&nbsp;with:</p>
+<pre><code class="lang-bash">docker push docker_hub_account_name/test_otsubinarization
+</code></pre>
+<p>This will upload the image into the official Docker repository, which is publicly available. 
+Discussions about hosting a closed DIVAServices repository are currently&nbsp;ongoing.</p>
+<h2 id="6-create-the-post-request-for-putting-the-method-on-divaservices">6. Create the <span class="caps">POST</span> request for putting the method on&nbsp;DIVAServices</h2>
+<p>Now we can install the method on DIVAServices. For the purpose of this Tutorial we will install it on a test installation of DIVAServices.
+For live deployment there is also <a href="http://divaservices.unifr.ch/management">DIVAServices-Management</a>, but we need to add support for Docker Image deployment to&nbsp;it.</p>
+<p>A method is deployed by executing an <span class="caps">HTTP</span> POST request to the <code>/algorithms</code> route of DIVAServices.
+To deploy the Otsu Binarisation we need to attach a <span class="caps">JSON</span> request body that looks as&nbsp;follows:</p>
+<p>We provide a python script <code>solutions/createMethod.py</code> that can be adapted to execute this&nbsp;request.</p>
+<pre><code class="lang-JSON">{
+  <span class="attr">"general"</span>: 
+  {
+    <span class="attr">"name"</span>: <span class="string">"Firstname Otsu Binarization"</span>,
+    <span class="attr">"description"</span>: <span class="string">"Otsu Binarization"</span>,
+    <span class="attr">"developer"</span>: <span class="string">"<span class="caps">YOUR</span> NAME"</span>,
+    <span class="attr">"affiliation"</span>: <span class="string">"<span class="caps">YOUR</span> AFFILIATION"</span>,
+    <span class="attr">"email"</span>: <span class="string">"your.name@email.com"</span>,
+    <span class="attr">"author"</span>: <span class="string">"<span class="caps">YOUR</span> NAME"</span>,
+    <span class="attr">"<span class="caps">DOI</span>"</span>: <span class="string">"10.1109/<span class="caps">TSMC</span>.1979.4310076"</span>,
+    <span class="attr">"type"</span>: <span class="string">"binarization"</span>,
+    <span class="attr">"license"</span>: <span class="string">"Other"</span>,
+    <span class="attr">"ownsCopyright"</span>: <span class="string">"1"</span>
+  },
+  <span class="attr">"input"</span>: [
+      {
+        <span class="attr">"file"</span>: {
+            <span class="attr">"name"</span>: <span class="string">"inputImage"</span>,
+            <span class="attr">"description"</span>: <span class="string">"The input image to binarize"</span>,
+            <span class="attr">"options"</span>: {
+                <span class="attr">"required"</span>: <span class="literal">true</span>,
+                <span class="attr">"mimeTypes"</span>: {
+                    <span class="attr">"allowed"</span>: [
+                        <span class="string">"image/jpeg"</span>,
+                        <span class="string">"image/png"</span>
+                    ],
+                    <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+                }
+            }
+        }
+      },
+      {
+        <span class="attr">"outputFolder"</span>: {}
+      }
+    ],
+  <span class="attr">"output"</span>: [
+    {
+      <span class="attr">"file"</span>: {
+        <span class="attr">"name"</span>: <span class="string">"otsuBinaryImage"</span>,
+          <span class="attr">"type"</span>: <span class="string">"image"</span>,
+          <span class="attr">"description"</span>: <span class="string">"Generated Binary Image"</span>,
+          <span class="attr">"options"</span>: {
+            <span class="attr">"mimeTypes"</span>: {
+            <span class="attr">"allowed"</span>: [
+                            <span class="string">"image/jpeg"</span>,
+                            <span class="string">"image/png"</span>
+                        ],
+                        <span class="attr">"default"</span>: <span class="string">"image/jpeg"</span>
+                    },
+                    <span class="attr">"colorspace"</span>: <span class="string">"binary"</span>,
+                    <span class="attr">"visualization"</span>: <span class="literal">true</span>
+                }
+            }
+        }
+    ],
+    <span class="attr">"method"</span>: {
+        <span class="attr">"imageType"</span>: <span class="string">"docker"</span>,
+        <span class="attr">"imageName"</span>: <span class="string">"my_name/test_otsubinarization"</span>,
+        <span class="attr">"testData"</span>: <span class="string">"https://dl.getdropbox.com/s/l6mobixty0k2o3i/testData.zip"</span>,
+        <span class="attr">"executableType"</span>: <span class="string">"bash"</span>,
+        <span class="attr">"executable_path"</span>: <span class="string">"/input/script.sh"</span>
+    }
+}
+</code></pre>
+<p>The <code>general</code> part contains information about the nature of the&nbsp;method.</p>
+<p>The <code>input</code> array contains information about the parameters the method requires to run. They need to be in the order in which the method takes the parameter from the command line. Currently DIVAServices supports the following&nbsp;inputs:</p>
+<ul>
+<li><strong>file</strong>: refers to a single input&nbsp;file</li>
+<li><strong>folder</strong> refers to a folder that contains the&nbsp;data</li>
+<li><strong>text</strong> refers to a string provided to the&nbsp;method</li>
+<li><strong>number</strong> refers to a number provided to the&nbsp;method</li>
+<li><strong>select</strong> refers to a string provided to the method, but the options are&nbsp;fix</li>
+</ul>
+<p>The <span class="caps">JSON</span>-Schema for the method creation is available <a href="https://raw.githubusercontent.com/lunactic/DIVAServices/development/conf/schemas/createAlgorithmSchema.json">here</a></p>
+<p>Copy the python script into the <code>sources</code> directory:</p>
+<pre><code class="lang-bash">
+cp solutions/createMethod.py sources/createMethod.py
+
+</code></pre>
+<p>In the copy change the following values of the <span class="caps">JSON</span> body (in the <code>payload</code> variable)</p>
+<ul>
+<li><code>general:name</code> set the name of the method in the form of “<span class="caps">YOURFIRSTNAME</span> Otsu&nbsp;Binarization”</li>
+<li><code>general:developer</code> provide your&nbsp;name</li>
+<li><code>general:author</code> provide your&nbsp;name</li>
+<li><code>general:affiliation</code> provide your&nbsp;affiliation</li>
+<li><code>general:email</code> provide your email&nbsp;address</li>
+<li><code>method:imageName</code> provide the name of your Docker Image as on Docker&nbsp;Hub</li>
+</ul>
+<p>After performing the changes execute the script with: <code>python createMethod.py</code></p>
+<h2 id="7-testing-the-method-on-divaservices">7. Testing the method on&nbsp;DIVAServices</h2>
+<p>You can use the script <code>executeOnDivaservices.py</code> in the <code>solutions</code> folder to test your method on DIVAServices.
+The script can be executed in the form&nbsp;of:</p>
+<pre><code class="lang-bash">python executeOnDivaservices.py URL_TO_METHOD FOLDER_TO_STORE_RESULT
+</code></pre>
+<p>,&nbsp;e.g. </p>
+<pre><code class="lang-bash">python executeOnDivaservices.py http://divaservices.unifr.ch/api/v2/binarization/otsubinarization/1 OtsuBinarization
+</code></pre>
+<p>This will execute the official Otsu Binarization on DIVAServices and the resulting image will be stored in the <code>OtsuBinarization</code> folder as <code>otsuBinaryImage.png</code>.
+To test your method replace the <span class="caps">URL</span> with: <code>http://XXX.XXX.XXX.XXX/binarization/firstnameotsubinarization/1</code>. </p>
+<p>If this results in the image stored in the output folder, Congratulations! You are now able to deploy a method on&nbsp;DIVAServices.</p>
 </section>
       </div>
     </div>
